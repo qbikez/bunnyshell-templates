@@ -19,7 +19,7 @@ components:
     gitDockerComposePath: /apps/dotnet/my-api/docker-compose # the path of the docker-compose.yaml inside the git_repo
     dockerCompose:
       build:
-        context: /apps/dotnet/my-api
+        context: .
         dockerfile: Dockerfile
       environment:
         ASPNETCORE_ENVIRONMENT: Development
