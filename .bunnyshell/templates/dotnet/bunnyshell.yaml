@@ -16,10 +16,10 @@ components:
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
     gitBranch: main
     gitApplicationPath: /apps/dotnet/my-api # optional; for monorepo apps
-    gitDockerComposePath: /apps/dotnet/my-api/docker-compose # the path of the docker-compose.yaml inside the git_repo
+    gitDockerComposePath: /apps/dotnet/my-api/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
     dockerCompose:
       build:
-        context: .
+        context: . #relative to gitApplicationPath
         dockerfile: Dockerfile
       environment:
         ASPNETCORE_ENVIRONMENT: Development
