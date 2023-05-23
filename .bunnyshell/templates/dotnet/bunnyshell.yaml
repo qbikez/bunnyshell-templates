@@ -27,11 +27,11 @@ components:
         ASPNETCORE_ENVIRONMENT: Development
         ASPNETCORE_URLS: http://+:9000
           
-    hosts: # you can add more
-      - hostname: myapi-${env_unique}.bunnyenv.com # will be suffixed with -${env_unique}.bunnyenv.com
-        path: / # optional
-        servicePort: 9000
-        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+    # hosts: # you can add more
+    #   - hostname: my-api # will be suffixed with -${env_unique}.bunnyenv.com
+    #     path: / # optional
+    #     servicePort: 9000
+    #     public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
 
 # security:
 #   access:
