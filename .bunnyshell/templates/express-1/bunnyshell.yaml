@@ -1,8 +1,8 @@
-# yaml-language-server: $schema=https://gist.githubusercontent.com/qbikez/74abe161996cd6360c2876ea7fd15cfb/raw/67be972b3e8a4b3df3d75a1e1fca46c297dd92d0/bunnyshell.schema.json
+# yaml-language-server: $schema=./bunnyshell.schema.json
 version: v1
 kind: Environment
 name: my-env
-type: ephemeral
+type: ephemeral # primary | ephemeral
 deployment:
   strategy:
     type: RollingUpdate
@@ -26,7 +26,7 @@ components:
       init_containers:
         -
           from: frontend
-          name: # the name of the container
+          name: frontend # the name of the container
           shared_paths:
             -
               path: /var/www/public # path on this service container (e.g. frontend)
@@ -37,7 +37,7 @@ components:
       sidecar_containers:
         -
           from: php
-          name: # the name of the container
+          name: php # the name of the container
     hosts: # you can add more
       - hostname: app # will be suffixed with -${env_unique}.bunnyenv.com
         path: / # optional
@@ -61,13 +61,7 @@ components:
         name: db-data
         mount: /var/lib/mysql
         subPath: ''
-    hosts:
-security:
-  access:
-    allowedIps: # only IPs in these ranges will be able to access the non-public hosts
-      - '192.168.0.1/24'
-      - '192.12.45.123/32'
-      
+    hosts: []
   - kind: SidecarContainer
     version: v1
     name: php
@@ -96,6 +90,13 @@ security:
     dockerCompose:
       build:
         context: frontend
+
+security:
+  access:
+    allowedIps: # only IPs in these ranges will be able to access the non-public hosts
+      - '192.168.0.1/24'
+      - '192.12.45.123/32'
+
 volumes:
   - name: db-data
     size: 1Gi
@@ -118,3 +119,4 @@ dev:
               requests:
                   cpu: '0.15'
                   memory: 500M
+                  
