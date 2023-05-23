@@ -1,0 +1,19 @@
+name: Express.js (NodeJS) + React + PostgreSQL
+description: This app is a CRUD example, composed out of one frontend, one backend service and one database. Its purpose is to illustrate how you can quickly get started with Bunnyshell.
+tags:
+   - nodejs
+   - express
+   - react
+   - postgres
+icons: [ 'nodejs', 'express', 'react', 'postgres' ]
+stack:
+  packages:
+    - name: Node.js
+      version: '18'
+    - name: Express.js
+      version: '4.18'
+    - name: React
+      version: '17.02'
+    - name: PostgreSQL
+      version: '15.2'
+discoverable: true

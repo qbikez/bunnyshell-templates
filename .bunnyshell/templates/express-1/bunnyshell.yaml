@@ -1,0 +1,120 @@
+# yaml-language-server: $schema=https://gist.githubusercontent.com/qbikez/74abe161996cd6360c2876ea7fd15cfb/raw/67be972b3e8a4b3df3d75a1e1fca46c297dd92d0/bunnyshell.schema.json
+version: v1
+kind: Environment
+name: my-env
+type: ephemeral
+deployment:
+  strategy:
+    type: RollingUpdate
+    maxUnavailable: 2 # optional, the default value is 25%
+    maxSurge: 50% # optional, the default value is 25%
+components:
+  - kind: Service
+    version: v1
+    name: nginx
+    gitRepo: git@...
+    gitBranch: master
+    gitApplicationPath: / # optional; for monorepo apps
+    gitDockerComposePath: / # the path of the docker-compose.yaml inside the git_repo
+    dockerCompose:
+      build:
+        context: .docker/nginx
+        dockerfile: Dockerfile
+        args:
+          buildno: 1
+    pod:
+      init_containers:
+        -
+          from: frontend
+          name: # the name of the container
+          shared_paths:
+            -
+              path: /var/www/public # path on this service container (e.g. frontend)
+              target:
+                container: '@parent'
+                path: /var/www/html/public # path on the pod-colocated service container (e.g. nginx)
+              initial_contents: '@self'
+      sidecar_containers:
+        -
+          from: php
+          name: # the name of the container
+    hosts: # you can add more
+      - hostname: app # will be suffixed with -${env_unique}.bunnyenv.com
+        path: / # optional
+        servicePort: 8080
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+
+  - kind: Database
+    name: mysql
+    gitRepo: git@...
+    gitBranch: master
+    gitApplicationPath: / # optional; for monorepo apps
+    gitDockerComposePath: / # the path of the docker-compose.yaml inside the git_repo
+    dockerCompose:
+      build:
+        context: .docker/mysql
+        dockerfile: Dockerfile
+        args:
+          buildno: 1
+    volumes:
+      -
+        name: db-data
+        mount: /var/lib/mysql
+        subPath: ''
+    hosts:
+security:
+  access:
+    allowedIps: # only IPs in these ranges will be able to access the non-public hosts
+      - '192.168.0.1/24'
+      - '192.12.45.123/32'
+      
+  - kind: SidecarContainer
+    version: v1
+    name: php
+    gitRepo: git@...
+    gitBranch: master
+    gitApplicationPath: / # optional; for monorepo apps
+    gitDockerComposePath: / # the path of the docker-compose.yaml inside the git_repo
+    dockerCompose:
+      # image: ... # if present, `image` will be removed, we will build the image and after that we will add the image: with the value from our Amazon ECR
+      build:
+        context: .docker/php
+        dockerfile: Dockerfile
+        args:
+          buildno: 1
+    hosts: # you can add more
+      - hostname: app # will be suffixed with -${env_unique}.bunnyenv.com
+        path: / # optional
+        servicePort: 8080
+
+  - kind: InitContainer
+    version: v1
+    name: frontend
+    gitRepo: git@...
+    gitBranch: master
+    gitApplicationPath: / # optional; for monorepo apps
+    dockerCompose:
+      build:
+        context: frontend
+volumes:
+  - name: db-data
+    size: 1Gi
+    type: disk
+dev:
+  nginx:
+    - containers:
+        nginx:
+          command: ['nginx']
+          syncPaths:
+            - remotePath: /var/www/
+              localPath: ~/project
+          portForwards:
+            - "8080<8080"
+          environment:
+            WHEN_IN_DEV: '{{ env.vars.OTHER_VAR }}'
+          resources:
+              limits:
+                  memory: 750M
+              requests:
+                  cpu: '0.15'
+                  memory: 500M
