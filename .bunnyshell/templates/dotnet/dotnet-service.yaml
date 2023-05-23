@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://gist.githubusercontent.com/qbikez/74abe161996cd6360c2876ea7fd15cfb/raw/67be972b3e8a4b3df3d75a1e1fca46c297dd92d0/bunnyshell.schema.json
+
+version: v1
+kind: Environment
+name: dotnet
+type: ephemeral # primary | ephemeral
+# deployment:
+#   strategy:
+#     type: RollingUpdate
+#     maxUnavailable: 2 # optional, the default value is 25%
+#     maxSurge: 50% # optional, the default value is 25%
+components:
+  - kind: Service
+    version: v1
+    name: my-api
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: /apps/dotnet/my-api # optional; for monorepo apps
+    gitDockerComposePath: /apps/dotnet/my-api/docker-compose # the path of the docker-compose.yaml inside the git_repo
+    dockerCompose:
+      build:
+        context: /apps/dotnet/my-api
+        dockerfile: Dockerfile
+      environment:
+        ASPNETCORE_ENVIRONMENT: Development
+        ASPNETCORE_URLS: http://+:9000
+          
+    hosts: # you can add more
+      - hostname: my-api # will be suffixed with -${env_unique}.bunnyenv.com
+        path: / # optional
+        servicePort: 9000
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+
+# security:
+#   access:
+#     allowedIps: # only IPs in these ranges will be able to access the non-public hosts
+#       - '192.168.0.1/24'
+#       - '192.12.45.123/32'
+
+# volumes:
+#   - name: db-data
+#     size: 1Gi
+#     type: disk
+# dev:
+#   nginx:
+#     - containers:
+#         nginx:
+#           command: ['nginx']
+#           syncPaths:
+#             - remotePath: /var/www/
+#               localPath: ~/project
+#           portForwards:
+#             - "8080<8080"
+#           environment:
+#             WHEN_IN_DEV: '{{ env.vars.OTHER_VAR }}'
+#           resources:
+#               limits:
+#                   memory: 750M
+#               requests:
+#                   cpu: '0.15'
+#                   memory: 500M
+                  

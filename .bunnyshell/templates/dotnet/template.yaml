@@ -1,0 +1,10 @@
+name: dotnetn
+description: dotnet
+tags:
+  - dotnet
+icons: [ 'dotnet' ]
+stack:
+  packages:
+    - name: dotnet
+      version: '7'
+discoverable: true
