@@ -19,7 +19,7 @@ components:
     gitDockerComposePath: /apps/dotnet/my-api/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
     dockerCompose:
       build:
-        context: apps/dotnet/my-api #relative to gitApplicationPath
+        context: apps/dotnet/my-api
         dockerfile: Dockerfile
       ports: 
         - "9000:9000"
@@ -27,7 +27,7 @@ components:
         ASPNETCORE_ENVIRONMENT: Development
         ASPNETCORE_URLS: http://+:9000
           
-          
+
     hosts: # you can add more
       - hostname: "my-api-{{env.unique}}.bunnyenv.com" # will be suffixed with -${env_unique}.bunnyenv.com
         path: / # optional
