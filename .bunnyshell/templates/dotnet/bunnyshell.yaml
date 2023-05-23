@@ -17,14 +17,15 @@ components:
     gitBranch: main
     gitApplicationPath: /apps/dotnet/my-api # optional; for monorepo apps
     gitDockerComposePath: /apps/dotnet/my-api/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
-    # dockerCompose:
-    #   build:
-    #     context: . #relative to gitApplicationPath
-    #     dockerfile: Dockerfile
-    #   ports: 9000
-    #   environment:
-    #     ASPNETCORE_ENVIRONMENT: Development
-    #     ASPNETCORE_URLS: http://+:9000
+    dockerCompose:
+      build:
+        context: . #relative to gitApplicationPath
+        dockerfile: Dockerfile
+      ports: 
+        - "9000:9000"
+      environment:
+        ASPNETCORE_ENVIRONMENT: Development
+        ASPNETCORE_URLS: http://+:9000
           
     hosts: # you can add more
       - hostname: my-api # will be suffixed with -${env_unique}.bunnyenv.com
