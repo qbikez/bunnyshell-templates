@@ -4,6 +4,11 @@ version: v1
 kind: Environment
 name: dotnet
 type: ephemeral # primary | ephemeral
+
+# should TF var mapping go into env template?
+environmentVariables:
+    tf_account_access_key: TF_OUT_AAAibAZHV1twAAABLw_account_access_key
+    tf_account_name: TF_OUT_AAAibAZHV1twAAABLw_account_name
 # deployment:
 #   strategy:
 #     type: RollingUpdate
