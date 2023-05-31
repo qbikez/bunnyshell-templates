@@ -24,9 +24,9 @@ components:
       ports:
       - "3000:3000"
       environment:
-        APPSETTING_STORAGE_ACCOUNT_NAME: "{{env.vars.account_name}}"
-        APPSETTING_STORAGE_ACCOUNT_KEY: "{{env.vars.account_access_key}}"
-        APPSETTING_CDN_ENDPOINT: "https://{{env.vars.account_name}}.blob.core.windows.net/"
+        APPSETTING_CDN_ENDPOINT: 'https://{{env.vars.tf_account_name}}.blob.core.windows.net/'
+        APPSETTING_STORAGE_ACCOUNT_KEY: '{{env.vars.tf_account_access_key}}'
+        APPSETTING_STORAGE_ACCOUNT_NAME: '{{env.vars.tf_account_name}}'
     hosts: # you can add more
       - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: / # optional
