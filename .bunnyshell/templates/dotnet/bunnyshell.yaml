@@ -66,10 +66,10 @@ components:
         - "10001:10001"
         - "10002:10002"
     hosts: # you can add more
-      - hostname: "azurite-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
-        path: /blob # optional
-        servicePort: 10000
-        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+      # - hostname: "azurite-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+      #   path: /blob # optional
+      #   servicePort: 10000
+      #   public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
       - hostname: "azurite-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: / # optional
         servicePort: 10002
