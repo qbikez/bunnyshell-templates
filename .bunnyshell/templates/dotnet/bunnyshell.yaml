@@ -56,7 +56,24 @@ components:
         path: / # optional
         servicePort: 9000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
-
+  
+  - kind: Service
+    name: azurite
+    dockerCompose:
+      image: mcr.microsoft.com/azure-storage/azurite
+      ports:
+        - "10000:10000"
+        - "10001:10001"
+        - "10002:10002"
+    hosts: # you can add more
+      - hostname: "azurite-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: /blob # optional
+        servicePort: 10000
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+      - hostname: "azurite-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: /tables # optional
+        servicePort: 10002
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
 # security:
 #   access:
 #     allowedIps: # only IPs in these ranges will be able to access the non-public hosts
