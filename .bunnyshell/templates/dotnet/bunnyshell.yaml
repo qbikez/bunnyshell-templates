@@ -68,14 +68,14 @@ components:
         - "10000:10000"
         - "10001:10001"
         - "10002:10002"
-      command: ["azurite", "-l", "/data", "--blobHost", "0.0.0.0","--queueHost", "0.0.0.0", "--tableHost", "0.0.0.0", "-d", "/log/debug.log"]
-      environment:
-        AZURITE_ACCOUNTS: "azurite-{{env.unique}}:Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+      command: ["azurite", "-l", "/data", "--blobHost", "0.0.0.0","--queueHost", "0.0.0.0", "--tableHost", "0.0.0.0", "-d", "/log/debug.log", "--disableProductStyleUrl"]
+      # environment:
+      #   AZURITE_ACCOUNTS: "azurite-{{env.unique}}:Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
     hosts: # you can add more
-      # - hostname: "azurite-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
-      #   path: /blob # optional
-      #   servicePort: 10000
-      #   public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+      - hostname: "azurite-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: /blob # optional
+        servicePort: 10000
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
       - hostname: "azurite-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: / # optional
         servicePort: 10002
