@@ -9,6 +9,9 @@ type: ephemeral # primary | ephemeral
 #     type: RollingUpdate
 #     maxUnavailable: 2 # optional, the default value is 25%
 #     maxSurge: 50% # optional, the default value is 25%
+environmentVariables:
+    tf_account_access_key: TF_OUT_AAAibAZHV1twAAABLw_account_access_key
+    tf_account_name: TF_OUT_AAAibAZHV1twAAABLw_account_name
 components:
   - kind: Application
     version: v1
