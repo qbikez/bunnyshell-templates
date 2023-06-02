@@ -1,0 +1,14 @@
+diff --git a/node_modules/oc-azure-storage-adapter/lib/index.js b/node_modules/oc-azure-storage-adapter/lib/index.js
+index b69e967..37a2969 100644
+--- a/node_modules/oc-azure-storage-adapter/lib/index.js
++++ b/node_modules/oc-azure-storage-adapter/lib/index.js
+@@ -40,7 +40,8 @@ function azureAdapter(conf) {
+     });
+     const getClient = () => {
+         const sharedKeyCredential = new storage_blob_1.StorageSharedKeyCredential(conf.accountName, conf.accountKey);
+-        const blobServiceClient = new storage_blob_1.BlobServiceClient(`https://${conf.accountName}.blob.core.windows.net`, sharedKeyCredential);
++        const blobUrl = conf.blobUrl || `https://${conf.accountName}.blob.core.windows.net`;
++        const blobServiceClient = new storage_blob_1.BlobServiceClient(blobUrl, sharedKeyCredential);
+         return blobServiceClient;
+     };
+     const getFile = async (filePath, force = false) => {
