@@ -6,10 +6,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    environment:
-      APPSETTING_STORAGE_ACCOUNT_NAME: ""
-      APPSETTING_STORAGE_ACCOUNT_KEY: ""
-      APPSETTING_CDN_ENDPOINT: "https://${APPSETTING_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/"
-      APPSETTING_REGISTRY_USERNAME: ""
-      APPSETTING_REGISTRY_PASSWORD: ""
-      APPSETTING_BASEURL: "http://localhost:3000"
+    # environment:
+    #   APPSETTING_STORAGE_ACCOUNT_NAME: ""
+    #   APPSETTING_STORAGE_ACCOUNT_KEY: ""
+    #   APPSETTING_CDN_ENDPOINT: "https://${APPSETTING_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/"
+    #   APPSETTING_REGISTRY_USERNAME: ""
+    #   APPSETTING_REGISTRY_PASSWORD: ""
+    #   APPSETTING_BASEURL: "http://localhost:3000"
+    env_file:
+      - .env
