@@ -34,7 +34,7 @@ components:
         APPSETTING_STORAGE_ACCOUNT_NAME: '{{env.vars.tf_account_name}}'
         APPSETTING_REGISTRY_USERNAME: "{{env.vars.oc_username}}"
         APPSETTING_REGISTRY_PASSWORD: "{{env.vars.oc_password}}"
-        APPSETTING_BASEURL: "ocregistry-{{env.unique}}.bunnyenv.com"
+        APPSETTING_BASEURL: "https://ocregistry-{{env.unique}}.bunnyenv.com"
     hosts: # you can add more
       - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: / # optional
