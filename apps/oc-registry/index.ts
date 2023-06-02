@@ -34,7 +34,7 @@ var configuration: Partial<Config> = {
 
 var registry = oc.Registry({
   ...configuration,
-  baseUrl: process.env.APPSETTING_BASE_URL!
+  baseUrl: process.env.APPSETTING_BASEURL || "http://localhost:3000/"
 });
 
 registry.start(function (err, app) {
