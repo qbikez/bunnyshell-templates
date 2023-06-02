@@ -2,3 +2,4 @@
 .terraform.lock.hcl
 node_modules/
 build/
+_package/
