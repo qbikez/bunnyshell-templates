@@ -84,14 +84,18 @@ components:
 
   - kind: GenericComponent  
     runnerImage: '@self'
-    deploy: |
-      echo "messa deploying"
-    destroy: |
-      echo "messa destroyed :("
-    start: |
-      echo "messa starting"
-    stop: | 
-      echo "messa stopping"
+    deploy: 
+      - |
+        echo "messa deploying"
+    destroy: 
+      - |
+        echo "messa destroyed :("
+    start: 
+      - |
+        echo "messa starting"
+    stop: 
+      - | 
+        echo "messa stopping"
     version: v1
     name: components-publisher
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
