@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "ts-node --project ./tsconfig.json --files ./ index.ts",
     "build": "tsc"
   },
   "author": "",
@@ -12,7 +12,8 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "oc": "^0.49.29",
-    "oc-azure-storage-adapter": "^1.1.1"
+    "oc-azure-storage-adapter": "^1.1.1",
+    "oc-template-typescript-react": "^4.1.0"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",

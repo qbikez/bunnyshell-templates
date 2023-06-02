@@ -2,6 +2,7 @@ import * as oc from "oc";
 import { Config } from "oc/dist/types";
 import azure from "oc-azure-storage-adapter";
 import dotnev from "dotenv";
+import * as typescriptReact from 'oc-template-typescript-react';
 
 dotnev.config();
 
@@ -30,11 +31,14 @@ var configuration: Partial<Config> = {
       componentsDir: "components",
     },
   },
+  templates: [
+    typescriptReact
+  ]
 };
 
 var registry = oc.Registry({
   ...configuration,
-  baseUrl: process.env.APPSETTING_BASEURL || "http://localhost:3000/"
+  baseUrl: process.env.APPSETTING_BASEURL  || "http://localhost:3000/"
 });
 
 registry.start(function (err, app) {
