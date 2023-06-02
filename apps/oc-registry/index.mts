@@ -44,8 +44,7 @@ var configuration = {
     typescriptReact
   ]
 };
-console.dir(oc);
-console.dir(oc.Registry);
+
 var registry = oc.Registry({
   ...configuration,
   baseUrl: process.env.APPSETTING_BASEURL  || "http://localhost:3000/"
