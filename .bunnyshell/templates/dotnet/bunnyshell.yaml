@@ -15,7 +15,7 @@ environmentVariables:
   tf_account_access_key: TF_OUT_AAAibAZHV1twAAABLw_account_access_key
   tf_account_name: TF_OUT_AAAibAZHV1twAAABLw_account_name
 components:
-  - kind: InitContainer
+  - kind: Application
     name: components-publisher
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
     gitBranch: main
@@ -48,10 +48,10 @@ components:
         APPSETTING_REGISTRY_USERNAME: "{{env.vars.oc_username}}"
         APPSETTING_STORAGE_ACCOUNT_KEY: "{{env.vars.tf_account_access_key}}"
         APPSETTING_STORAGE_ACCOUNT_NAME: "{{env.vars.tf_account_name}}"
-    pod:
-      init_containers:
-        - from: components-publisher
-          name: components-publisher
+    # pod:
+    #   init_containers:
+    #     - from: components-publisher
+    #       name: components-publisher
     hosts: # you can add more
       - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: / # optional
