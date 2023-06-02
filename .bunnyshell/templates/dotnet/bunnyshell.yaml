@@ -35,6 +35,10 @@ components:
         APPSETTING_REGISTRY_USERNAME: "{{env.vars.oc_username}}"
         APPSETTING_REGISTRY_PASSWORD: "{{env.vars.oc_password}}"
         APPSETTING_BASEURL: "https://ocregistry-{{env.unique}}.bunnyenv.com"
+    pod:
+      init_containers:
+        - from: components-publisher
+          name: components-publisher
     hosts: # you can add more
       - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: / # optional
@@ -63,6 +67,27 @@ components:
         servicePort: 9000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
   
+  - kind: InitContainer
+    name: components-publisher
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: /apps/open-components
+    dockerCompose:
+      build:
+        context: apps/open-components
+        dockerfile: Dockerfile
+      environment:
+        OC_USERNAME: "{{env.vars.oc_username}}"
+        OC_PASSWORD: "{{env.vars.oc_password}}"
+        OC_REGISTRY: "ocregistry-{{env.unique}}.bunnyenv.com"
+
+    # resources:
+    #   limits:
+    #     memory: 750M
+    #   requests:
+    #     cpu: '0.15'
+    #     memory: 500M
+
   - kind: Service
     name: azurite
     dockerCompose:
@@ -84,19 +109,6 @@ components:
         servicePort: 10002
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
 
-  - kind: Application
-    name: components-publisher
-    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
-    gitBranch: main
-    gitApplicationPath: /apps/open-components
-    dockerCompose:
-      build:
-        context: apps/open-components
-        dockerfile: Dockerfile
-      environment:
-        OC_USERNAME: "{{env.vars.oc_username}}"
-        OC_PASSWORD: "{{env.vars.oc_password}}"
-        OC_REGISTRY: "ocregistry-{{env.unique}}.bunnyenv.com"
 
 # security:
 #   access:
