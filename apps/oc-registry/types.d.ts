@@ -1,4 +1,3 @@
-declare module 'oc-template-typescript-react' {
-    export {}
-  }
-  
+declare module "oc-template-typescript-react" {
+  export {};
+}

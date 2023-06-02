@@ -2,15 +2,15 @@
   "name": "oc-registry",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "ts-node --project ./tsconfig.json --files ./ index.ts",
+    "start": "ts-node --project ./tsconfig.json --files=\"*.d.ts\" index.mts",
     "build": "tsc",
     "postinstall": "patch-package"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "azure-storage": "^2.10.7",
     "dotenv": "^16.0.3",
     "oc": "^0.49.29",
     "oc-azure-storage-adapter": "^1.1.1",
