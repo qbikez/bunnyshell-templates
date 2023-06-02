@@ -5,7 +5,6 @@ COPY ["package.json", "package-lock.json", "./"]
 COPY ["patches/", "./patches/"]
 
 RUN npm ci
-RUN npx patch-package
 
 COPY . .
 RUN npm run build
