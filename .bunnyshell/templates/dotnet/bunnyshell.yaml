@@ -3,7 +3,7 @@
 version: v1
 kind: Environment
 name: dotnet
-type: ephemeral # primary | ephemeral
+type: primary # primary | ephemeral
 # deployment:
 #   strategy:
 #     type: RollingUpdate
