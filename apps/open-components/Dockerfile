@@ -13,4 +13,5 @@ RUN chmod u+x ./install.sh && ./install.sh
 COPY ["./publish.sh", "./"]
 RUN chmod u+x ./publish.sh
 
+
 CMD [ "/bin/bash", "./publish.sh" ]
