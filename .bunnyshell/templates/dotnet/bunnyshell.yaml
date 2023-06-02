@@ -10,6 +10,8 @@ type: ephemeral # primary | ephemeral
 #     maxUnavailable: 2 # optional, the default value is 25%
 #     maxSurge: 50% # optional, the default value is 25%
 environmentVariables:
+    oc_password: '<<BNS_SECRET>>'
+    oc_username: bunny
     tf_account_access_key: TF_OUT_AAAibAZHV1twAAABLw_account_access_key
     tf_account_name: TF_OUT_AAAibAZHV1twAAABLw_account_name
 components:
@@ -100,6 +102,7 @@ components:
     name: components-publisher
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
     gitBranch: master
+    gitApplicationPath: /apps/open-components
     dockerCompose:
       build:
         context: apps/open-components
