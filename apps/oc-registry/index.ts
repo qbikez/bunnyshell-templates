@@ -13,13 +13,17 @@ var configuration: Partial<Config> = {
   tempDir: "./temp/",
   refreshInterval: 600,
   pollingInterval: 5,
-
+  publishAuth: {
+    type: "basic",
+    username: process.env.APPSETTING_REGISTRY_USERNAME,
+    password: process.env.APPSETTING_REGISTRY_PASSWORD,
+  },
   env: { name: "production" },
   storage: {
     adapter: azure,
     options: {
-      accountName: process.env.APPSETTING_STORAGE_ACCOUNT_NAME || "not-set",
-      accountKey: process.env.APPSETTING_STORAGE_ACCOUNT_KEY || "not-set",
+      accountName: process.env.APPSETTING_STORAGE_ACCOUNT_NAME,
+      accountKey: process.env.APPSETTING_STORAGE_ACCOUNT_KEY,
       publicContainerName: "oc-public",
       privateContainerName: "oc-private",
       path: `${cdnEndpoint}oc-public/`,
@@ -30,7 +34,7 @@ var configuration: Partial<Config> = {
 
 var registry = oc.Registry({
   ...configuration,
-  baseUrl: "https://my-components-registry.mydomain.com/",
+  baseUrl: process.env.APPSETTING_BASE_URL!
 });
 
 registry.start(function (err, app) {
