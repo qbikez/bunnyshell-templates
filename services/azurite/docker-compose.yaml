@@ -9,3 +9,4 @@ services:
     command: ["azurite", "-l", "/data", "--blobHost", "0.0.0.0","--queueHost", "0.0.0.0", "--tableHost", "0.0.0.0", "-d", "/log/debug.log"]
     volumes:
       - "./log:/log"
+    env_file: .env
