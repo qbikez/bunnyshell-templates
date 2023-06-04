@@ -3,7 +3,7 @@
 version: v1
 kind: Environment
 name: dotnet
-type: ephemeral # primary | ephemeral
+type: primary # primary | ephemeral
 # deployment:
 #   strategy:
 #     type: RollingUpdate
@@ -15,77 +15,6 @@ environmentVariables:
   tf_account_access_key: TF_OUT_AAAibAZHV1twAAABLw_account_access_key
   tf_account_name: TF_OUT_AAAibAZHV1twAAABLw_account_name
 components:
-  - kind: InitContainer
-    name: components-publisher
-    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
-    gitBranch: main
-    gitApplicationPath: /apps/open-components
-    dockerCompose:
-      build:
-        context: apps/open-components
-        dockerfile: Dockerfile
-      environment:
-        OC_USERNAME: "{{env.vars.oc_username}}"
-        OC_PASSWORD: "{{env.vars.oc_password}}"
-        OC_REGISTRY: "ocregistry-{{env.unique}}.bunnyenv.com"
-  - kind: Application
-    version: v1
-    name: oc-registry
-    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
-    gitBranch: main
-    gitApplicationPath: /apps/oc-registry
-    gitDockerComposePath: /apps/oc-registry/docker-compose.yaml
-    dockerCompose:
-      build:
-        context: apps/oc-registry
-        dockerfile: Dockerfile
-      ports:
-        - "3000:3000"
-      environment:
-        APPSETTING_BASEURL: "https://ocregistry-{{env.unique}}.bunnyenv.com"
-        APPSETTING_CDN_ENDPOINT: "https://{{env.vars.tf_account_name}}.blob.core.windows.net/"
-        APPSETTING_REGISTRY_PASSWORD: "{{env.vars.oc_password}}"
-        APPSETTING_REGISTRY_USERNAME: "{{env.vars.oc_username}}"
-        APPSETTING_STORAGE_ACCOUNT_KEY: "{{env.vars.tf_account_access_key}}"
-        APPSETTING_STORAGE_ACCOUNT_NAME: "{{env.vars.tf_account_name}}"
-    pod:
-      init_containers:
-        - from: components-publisher
-          name: components-publisher
-    hosts: # you can add more
-      - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
-        path: / # optional
-        servicePort: 3000
-        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
-
-  - kind: Application
-    version: v1
-    name: my-api
-    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
-    gitBranch: main
-    gitApplicationPath: /apps/dotnet/my-api # optional; for monorepo apps
-    gitDockerComposePath: /apps/dotnet/my-api/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
-    dockerCompose:
-      build:
-        context: apps/dotnet/my-api
-        dockerfile: Dockerfile
-      ports:
-        - "9000:9000"
-      environment:
-        ASPNETCORE_ENVIRONMENT: Development
-        ASPNETCORE_URLS: http://+:9000
-    hosts: # you can add more
-      - hostname: "my-api-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
-        path: / # optional
-        servicePort: 9000
-        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
-
-    # resources:
-    #   limits:
-    #     memory: 750M
-    #   requests:
-    #     cpu: '0.15'
-    #     memory: 500M
 
   - kind: Service
     name: azurite
@@ -121,6 +50,85 @@ components:
         path: / # optional
         servicePort: 10002
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+
+  - kind: Application
+    version: v1
+    name: oc-registry
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: /apps/oc-registry
+    gitDockerComposePath: /apps/oc-registry/docker-compose.yaml
+    dockerCompose:
+      build:
+        context: apps/oc-registry
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+      environment:
+        APPSETTING_BASEURL: "https://ocregistry-{{env.unique}}.bunnyenv.com"
+        
+        APPSETTING_REGISTRY_PASSWORD: "{{env.vars.oc_password}}"
+        APPSETTING_REGISTRY_USERNAME: "{{env.vars.oc_username}}"
+        
+        # APPSETTING_CDN_ENDPOINT: "https://{{env.vars.tf_account_name}}.blob.core.windows.net/"
+        # APPSETTING_STORAGE_ACCOUNT_KEY: "{{env.vars.tf_account_access_key}}"
+        # APPSETTING_STORAGE_ACCOUNT_NAME: "{{env.vars.tf_account_name}}"
+        APPSETTING_CDN_ENDPOINT: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
+        APPSETTING_BLOB_URL: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
+        APPSETTING_STORAGE_ACCOUNT_NAME: "devstoreaccount1"
+        APPSETTING_STORAGE_ACCOUNT_KEY: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+   # pod:
+    #   init_containers:
+    #     - from: components-publisher
+    #       name: components-publisher
+    hosts: # you can add more
+      - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: / # optional
+        servicePort: 3000
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+
+  - kind: Application
+    name: components-publisher
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: /apps/open-components
+    dockerCompose:
+      build:
+        context: apps/open-components
+        dockerfile: Dockerfile
+      environment:
+        OC_USERNAME: "{{env.vars.oc_username}}"
+        OC_PASSWORD: "{{env.vars.oc_password}}"
+        OC_REGISTRY: "ocregistry-{{env.unique}}.bunnyenv.com"
+
+  - kind: Application
+    version: v1
+    name: my-api
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: /apps/dotnet/my-api # optional; for monorepo apps
+    gitDockerComposePath: /apps/dotnet/my-api/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
+    dockerCompose:
+      build:
+        context: apps/dotnet/my-api
+        dockerfile: Dockerfile
+      ports:
+        - "9000:9000"
+      environment:
+        ASPNETCORE_ENVIRONMENT: Development
+        ASPNETCORE_URLS: http://+:9000
+    hosts: # you can add more
+      - hostname: "my-api-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: / # optional
+        servicePort: 9000
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+
+    # resources:
+    #   limits:
+    #     memory: 750M
+    #   requests:
+    #     cpu: '0.15'
+    #     memory: 500M
 
 # security:
 #   access:

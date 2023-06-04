@@ -29,6 +29,7 @@ var configuration: Partial<Config> = {
       privateContainerName: "oc-private",
       path: `${cdnEndpoint}oc-public/`,
       componentsDir: "components",
+      blobUrl: process.env.APPSETTING_BLOB_URL,
     },
   },
   templates: [
