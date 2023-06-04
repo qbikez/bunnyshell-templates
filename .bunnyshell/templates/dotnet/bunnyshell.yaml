@@ -20,9 +20,10 @@ components:
     name: azurite
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
     gitBranch: main
+    gitApplicationPath: /services/azurite
     dockerCompose:
       build:
-        context: service/azurite
+        context: services/azurite
         dockerfile: Dockerfile
       ports:
         - "10000:10000"
