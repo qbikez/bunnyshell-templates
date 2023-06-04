@@ -19,7 +19,9 @@ components:
   - kind: Service
     name: azurite
     dockerCompose:
-      image: mcr.microsoft.com/azure-storage/azurite
+      build:
+        context: service/azurite
+        dockerfile: Dockerfile
       ports:
         - "10000:10000"
         - "10001:10001"
