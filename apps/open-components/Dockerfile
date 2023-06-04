@@ -9,10 +9,15 @@ COPY ["package.json", "package-lock.json", "./"]
 RUN npm ci
 
 COPY ["./install.sh", "./"]
+# RUN chmod u+x ./install.sh && ./install.sh
+COPY ["./package-components.ps1", "./"]
+
 COPY ["hello-world/", "./hello-world/"]
-RUN chmod u+x ./install.sh && ./install.sh
 
-COPY ["./*.ps1", "./"]
-RUN chmod u+x ./*.ps1
+RUN pwsh ./package-components.ps1
 
-CMD [ "pwsh", "./publish-components.ps1" ]
+
+COPY ["./publish-components.ps1", "./"]
+COPY ["./entrypoint.ps1", "./"]
+
+CMD [ "pwsh", "./entrypoint.ps1" ]
