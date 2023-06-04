@@ -104,7 +104,7 @@ components:
       environment:
         OC_USERNAME: "{{env.vars.oc_username}}"
         OC_PASSWORD: "{{env.vars.oc_password}}"
-        OC_REGISTRY: "ocregistry-{{env.unique}}.bunnyenv.com"
+        OC_REGISTRY: "https://ocregistry-{{env.unique}}.bunnyenv.com"
 
   - kind: Application
     version: v1
