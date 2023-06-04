@@ -17,7 +17,6 @@ COPY ["hello-world/", "./hello-world/"]
 RUN pwsh ./package-components.ps1
 
 
-COPY ["./publish-components.ps1", "./"]
-COPY ["./entrypoint.ps1", "./"]
+COPY ["./*.ps1", "./"]
 
 CMD [ "pwsh", "./entrypoint.ps1" ]
