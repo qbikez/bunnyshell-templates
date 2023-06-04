@@ -18,6 +18,8 @@ components:
 
   - kind: Service
     name: azurite
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
     dockerCompose:
       build:
         context: service/azurite
