@@ -6,4 +6,4 @@ _package/
 *.log
 *.tar.gz
 temp/
-*.log
+*.orig
