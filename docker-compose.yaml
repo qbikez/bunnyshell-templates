@@ -1,0 +1,42 @@
+version: "3.7"
+services:
+  publisher:
+    env_file: apps/open-components/.env
+    restart: unless-stopped
+    build: apps/open-components/.
+  azurite:
+    volumes:
+      - ./log:/log
+    env_file: services/azurite/.env
+    build: services/azurite/.
+    ports:
+      - 10000:10000
+      - 10001:10001
+      - 10002:10002
+    command:
+      - azurite
+      - -l
+      - /data
+      - --blobHost
+      - 0.0.0.0
+      - --queueHost
+      - 0.0.0.0
+      - --tableHost
+      - 0.0.0.0
+      - -d
+      - /log/debug.log
+  oc-registry:
+    env_file: apps/oc-registry/.env
+    build:
+      context: apps/oc-registry/.
+    ports:
+      - 3000:3000
+  my-api:
+    environment:
+      ASPNETCORE_URLS: http://+:9000
+      ASPNETCORE_ENVIRONMENT: Development
+    build:
+      context: apps/dotnet/my-api/.
+    ports:
+      - 9000:9000
+
