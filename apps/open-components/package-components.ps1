@@ -1,10 +1,14 @@
-param($components = "hello-world")
+param($componentDir = "components")
 
-if (!(test-path packages)) {
-    mkdir packages
+pushd $componentDir
+
+try {
+    $components = Get-ChildItem -Directory | % { $_.Name }
+
+    foreach ($component in $components) {
+        npx oc package $component --compress --useComponentDependencies
+    }
 }
-
-foreach($component in $components) {
-   npx oc package $component --compress --useComponentDependencies
-   cp $component/package.tar.gz packages/$component.tar.gz
+finally {
+    popd
 }
