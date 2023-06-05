@@ -9,3 +9,6 @@ services:
     command: ["azurite", "-l", "/data", "--blobHost", "0.0.0.0","--queueHost", "0.0.0.0", "--tableHost", "0.0.0.0", "-d", "/log/debug.log"]
     volumes:
       - "./log:/log"
+
+# connection strings:
+# DefaultEndpointsProtocol=https;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=https://blob-ewoc74.bunnyenv.com/devstoreaccount1/
