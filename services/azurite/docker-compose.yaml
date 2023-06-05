@@ -1,7 +1,8 @@
 version: "3.8"
 services:
   azurite:
-    image: mcr.microsoft.com/azure-storage/azurite
+    build: .
+    # image: mcr.microsoft.com/azure-storage/azurite
     ports:
       - "10000:10000"
       - "10001:10001"
@@ -9,6 +10,7 @@ services:
     command: ["azurite", "-l", "/data", "--blobHost", "0.0.0.0","--queueHost", "0.0.0.0", "--tableHost", "0.0.0.0", "-d", "/log/debug.log"]
     volumes:
       - "./log:/log"
+    env_file: .env
 
 # connection strings:
 # DefaultEndpointsProtocol=https;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=https://blob-ewoc74.bunnyenv.com/devstoreaccount1/

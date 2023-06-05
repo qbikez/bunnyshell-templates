@@ -18,8 +18,13 @@ components:
 
   - kind: Service
     name: azurite
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: /services/azurite
     dockerCompose:
-      image: mcr.microsoft.com/azure-storage/azurite
+      build:
+        context: services/azurite
+        dockerfile: Dockerfile
       ports:
         - "10000:10000"
         - "10001:10001"
@@ -99,7 +104,7 @@ components:
       environment:
         OC_USERNAME: "{{env.vars.oc_username}}"
         OC_PASSWORD: "{{env.vars.oc_password}}"
-        OC_REGISTRY: "ocregistry-{{env.unique}}.bunnyenv.com"
+        OC_REGISTRY: "https://ocregistry-{{env.unique}}.bunnyenv.com"
 
   - kind: Application
     version: v1

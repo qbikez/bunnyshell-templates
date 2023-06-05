@@ -3,5 +3,7 @@
 node_modules/
 build/
 _package/
-temp/
 *.log
+*.tar.gz
+temp/
+*.orig
