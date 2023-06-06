@@ -105,6 +105,28 @@ components:
         OC_USERNAME: "{{env.vars.oc_username}}"
         OC_PASSWORD: "{{env.vars.oc_password}}"
         OC_REGISTRY: "https://ocregistry-{{env.unique}}.bunnyenv.com"
+  
+  - kind: Application
+    version: v1
+    name: frontend
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: /apps/dotnet/frontend # optional; for monorepo apps
+    gitDockerComposePath: /apps/dotnet/frontend/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
+    dockerCompose:
+      build:
+        context: apps/dotnet/frontend
+        dockerfile: Dockerfile
+      ports:
+        - "9000:9000"
+      environment:
+        # ASPNETCORE_ENVIRONMENT: Development
+        ASPNETCORE_URLS: http://+:9000
+    hosts: # you can add more
+      - hostname: "front-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: / # optional
+        servicePort: 9000
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
 
   - kind: Application
     version: v1
