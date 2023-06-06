@@ -20,7 +20,7 @@ RUN dotnet restore
 # copy everything else and build app
 COPY . .
 RUN dotnet build   --configuration Release --no-restore 
-RUN dotnet publish --configuration Release --self-contained false --no-build -p NoNpm=true -o /app
+RUN dotnet publish --configuration Release --no-build   --self-contained false -p NoNpm=true -o /app
 
 
 # final stage/image
