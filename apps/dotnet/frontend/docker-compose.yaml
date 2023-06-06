@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  my-api:
+    build:
+      context: .
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:9000
+    ports:
+      - 9000:9000
