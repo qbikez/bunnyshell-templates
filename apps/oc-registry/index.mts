@@ -1,14 +1,22 @@
-import * as oc from "oc";
-import { Config } from "oc/dist/types";
-import azure from "oc-azure-storage-adapter";
-import dotnev from "dotenv";
-import * as typescriptReact from 'oc-template-typescript-react';
+import oc from "oc";
+//const oc = (ocPkg as any).default;
+//import type { Config } from "oc/dist";
+import * as azurePkg from "oc-azure-storage-adapter";
+import * as dotnev from "dotenv";
+const azure = azurePkg.default;
+import typescriptReact from 'oc-template-typescript-react';
+import * as blobStorage from "@azure/storage-blob";
 
 dotnev.config();
 
+var blobService = new blobStorage.BlobServiceClient(process.env.APPSETTING_BLOB_URL!, new blobStorage.StorageSharedKeyCredential(process.env.APPSETTING_STORAGE_ACCOUNT_NAME!, process.env.APPSETTING_STORAGE_ACCOUNT_KEY!));
+
+await blobService.getContainerClient("oc-private").createIfNotExists();
+await blobService.getContainerClient("oc-public").createIfNotExists({ access: "blob"});
+
 const cdnEndpoint = process.env.APPSETTING_CDN_ENDPOINT;
 
-var configuration: Partial<Config> = {
+var configuration = {
   verbosity: 0,
   port: 3000,
   tempDir: "./temp/",
@@ -21,7 +29,7 @@ var configuration: Partial<Config> = {
   },
   env: { name: "production" },
   storage: {
-    adapter: azure,
+    adapter: (options: any) => azure(options),
     options: {
       accountName: process.env.APPSETTING_STORAGE_ACCOUNT_NAME,
       accountKey: process.env.APPSETTING_STORAGE_ACCOUNT_KEY,
@@ -42,7 +50,7 @@ var registry = oc.Registry({
   baseUrl: process.env.APPSETTING_BASEURL  || "http://localhost:3000/"
 });
 
-registry.start(function (err, app) {
+registry.start(function (err: any, app: any) {
   if (err) {
     console.log("Registry not started: ", err);
     process.exit(1);
