@@ -5,6 +5,7 @@ import "./App.css";
 import OpenComponentsClient from "./components/OpenComponentsClient";
 
 function App() {
+  const ocRegistry = import.meta.env.VITE_OC_REGISTRY;
   const [count, setCount] = useState(0);
   const [weather, setWeather] = useState<
     Array<{
@@ -16,7 +17,10 @@ function App() {
 
   return (
     <>
-      <OpenComponentsClient reactVersion="18.2.0" ocOrigin="http://localhost:3000"></OpenComponentsClient>
+      <OpenComponentsClient
+        reactVersion="18.2.0"
+        ocOrigin={ocRegistry}
+      ></OpenComponentsClient>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -58,7 +62,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <oc-component href="http://localhost:3000/hello-world/1.x.x/?userId=1"></oc-component>
+      <oc-component
+        href={`${ocRegistry}/hello-world/1.x.x/?userId=1`}
+      ></oc-component>
     </>
   );
 }
