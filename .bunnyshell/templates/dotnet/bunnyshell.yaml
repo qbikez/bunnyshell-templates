@@ -91,7 +91,11 @@ components:
         path: / # optional
         servicePort: 3000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
-
+      # expose it as the same host as front
+      - hostname: "front-{{env.unique}}.bunnyenv.com"
+        path: /registry/
+        servicePort: 3000
+        public: true
   - kind: Application
     name: components-publisher
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
