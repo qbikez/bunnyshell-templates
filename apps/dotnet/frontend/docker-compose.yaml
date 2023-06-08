@@ -4,9 +4,10 @@ services:
   my-api:
     build:
       context: .
+      args:
+        VITE_OC_REGISTRY: "http://localhost:3000/registry"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:9000
-    env_file: .env
     ports:
       - 9000:9000
