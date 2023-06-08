@@ -20,6 +20,7 @@ var configuration = {
   verbosity: 0,
   port: 3000,
   tempDir: "./temp/",
+  prefix: '/registry/',
   refreshInterval: 600,
   pollingInterval: 5,
   publishAuth: {
