@@ -3,6 +3,8 @@
 FROM node:18 as clientapp-builder
 WORKDIR /source
 
+ARG VITE_OC_REGISTRY="/registry/"
+
 COPY ["ClientApp/package.json", "ClientApp/package-lock.json", "ClientApp/"]
 RUN cd ClientApp && npm ci
 
