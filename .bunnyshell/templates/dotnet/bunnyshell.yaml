@@ -120,7 +120,7 @@ components:
       ports:
         - "9000:9000"
       environment:
-        # ASPNETCORE_ENVIRONMENT: Development
+        ASPNETCORE_ENVIRONMENT: Release
         ASPNETCORE_URLS: http://+:9000
     hosts: # you can add more
       - hostname: "front-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
