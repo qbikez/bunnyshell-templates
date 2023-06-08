@@ -88,7 +88,7 @@ components:
     #       name: components-publisher
     hosts: # you can add more
       - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
-        path: / # optional
+        path: /registry/
         servicePort: 3000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
       # expose it as the same host as front
