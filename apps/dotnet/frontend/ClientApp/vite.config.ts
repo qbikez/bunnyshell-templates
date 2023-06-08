@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), mkcert()],
   server: {
     port: 5200,
-    https: true,
+    https: false,
     strictPort : true,
     proxy: {
       '/api' : {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import OpenComponentsClient from "./components/OpenComponentsClient";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -15,6 +16,7 @@ function App() {
 
   return (
     <>
+      <OpenComponentsClient reactVersion="18.2.0" ocOrigin="http://localhost:3000"></OpenComponentsClient>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -43,15 +45,20 @@ function App() {
         >
           weather?
         </button>
-        <div>{weather.map((w) => (<div key={w.date}>
-          <span>{w.date}|</span>
-          <span>{w.temperatureC}|</span>
-          <span>{w.summary}</span>
-        </div>))}</div>
+        <div>
+          {weather.map((w) => (
+            <div key={w.date}>
+              <span>{w.date}|</span>
+              <span>{w.temperatureC}|</span>
+              <span>{w.summary}</span>
+            </div>
+          ))}
+        </div>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <oc-component href="http://localhost:3000/hello-world/1.x.x/?userId=1"></oc-component>
     </>
   );
 }
