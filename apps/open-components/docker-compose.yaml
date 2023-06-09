@@ -1,6 +1,8 @@
 version: "3.8"
 services:
-  publisher:
+  oc-registry:
     build: .
-    env_file: .env
+    env_file: 
+      - oc-registry/.env
+      - .env
     restart: unless-stopped
