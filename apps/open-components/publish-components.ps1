@@ -1,4 +1,4 @@
-param($componentsDir = "components")
+param($componentsDir = "components", $registryUrl = "http://localhost:3000/registry", $username, $password)
 
 
 pushd $componentsDir
@@ -7,10 +7,10 @@ try {
     $components = Get-ChildItem -Directory | % { $_.Name }
 
     foreach ($component in $components) {
-        write-host "publishing $component to $env:OC_REGISTRY"
-        $shouldPublish = & "$psscriptroot/check-ocversion.ps1" -ocUrl $env:OC_REGISTRY -ocName $component
+        write-host "publishing $component to $registryUrl"
+        $shouldPublish = & "$psscriptroot/check-ocversion.ps1" -ocUrl $registryUrl -ocName $component
         if ($shouldPublish) {
-            npx oc publish --skipPackage $component --registries $env:OC_REGISTRY --username $env:OC_USERNAME --password $env:OC_PASSWORD
+            npx oc publish --skipPackage $component --registries $registryUrl --username $username --password $password
             if ($LASTEXITCODE -ne 0) {
                 throw "failed to publish component $component"
             }
