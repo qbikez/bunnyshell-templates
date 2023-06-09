@@ -61,11 +61,11 @@ components:
     name: oc-registry
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
     gitBranch: main
-    gitApplicationPath: /apps/oc-registry
-    gitDockerComposePath: /apps/oc-registry/docker-compose.yaml
+    gitApplicationPath: /apps/open-components
+    gitDockerComposePath: /apps/open-components/docker-compose.yaml
     dockerCompose:
       build:
-        context: apps/oc-registry
+        context: apps/open-components
         dockerfile: Dockerfile
       ports:
         - "3000:3000"
@@ -82,13 +82,6 @@ components:
         APPSETTING_BLOB_URL: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
         APPSETTING_STORAGE_ACCOUNT_NAME: "devstoreaccount1"
         APPSETTING_STORAGE_ACCOUNT_KEY: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
-    # pod:
-    #   sidecar_containers:
-    #     - from: components-publisher
-    #       name: components-publisher
-    #   init_containers:
-    #     - from: components-publisher
-    #       name: components-publisher
     hosts: # you can add more
       - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: /registry/
@@ -99,20 +92,6 @@ components:
         path: /registry/
         servicePort: 3000
         public: true
-  - kind: Application
-    name: components-publisher
-    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
-    gitBranch: main
-    gitApplicationPath: /apps/open-components
-    dockerCompose:
-      build:
-        context: apps/open-components
-        dockerfile: Dockerfile
-      environment:
-        OC_USERNAME: "{{env.vars.oc_username}}"
-        OC_PASSWORD: "{{env.vars.oc_password}}"
-        OC_REGISTRY: "https://ocregistry-{{env.unique}}.bunnyenv.com"
-  
   - kind: Application
     version: v1
     name: frontend
