@@ -82,10 +82,10 @@ components:
         APPSETTING_BLOB_URL: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
         APPSETTING_STORAGE_ACCOUNT_NAME: "devstoreaccount1"
         APPSETTING_STORAGE_ACCOUNT_KEY: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
-    pod:
-      sidecar_containers:
-        - from: components-publisher
-          name: components-publisher
+    # pod:
+    #   sidecar_containers:
+    #     - from: components-publisher
+    #       name: components-publisher
     #   init_containers:
     #     - from: components-publisher
     #       name: components-publisher
@@ -99,7 +99,7 @@ components:
         path: /registry/
         servicePort: 3000
         public: true
-  - kind: SidecarContainer
+  - kind: StaticApplication
     name: components-publisher
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
     gitBranch: main
