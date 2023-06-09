@@ -4,9 +4,9 @@ version: v1
 kind: Environment
 name: dotnet
 type: primary # primary | ephemeral
-# deployment:
-#   strategy:
-#     type: RollingUpdate
+deployment:
+  strategy:
+    type: Recreate # RollingUpdate
 #     maxUnavailable: 2 # optional, the default value is 25%
 #     maxSurge: 50% # optional, the default value is 25%
 environmentVariables:
