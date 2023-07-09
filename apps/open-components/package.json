@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "oc dev components --prefix /registry/"
+  },
   "devDependencies": {
     "oc": "^0.49.29"
   }
