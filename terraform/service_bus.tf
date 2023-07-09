@@ -23,6 +23,7 @@ resource "azurerm_servicebus_topic" "payments" {
 }
 
 resource "azurerm_servicebus_subscription" "payment-processing" {
+  # TODO: include suffinx in subscription name?
   name               = "payment-processing"
   topic_id           = azurerm_servicebus_topic.payments.id
   max_delivery_count = 1
