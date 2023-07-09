@@ -11,4 +11,5 @@ services:
     #   APPSETTING_REGISTRY_USERNAME: ""
     #   APPSETTING_REGISTRY_PASSWORD: ""
     #   APPSETTING_BASEURL: "http://localhost:3000"
-    env_file: .env
+    env_file: ".env"
+  
