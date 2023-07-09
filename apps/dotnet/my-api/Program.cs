@@ -8,15 +8,25 @@ Console.WriteLine($"init...");
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSignalR();
+builder.Services.AddCors(options => options.AddDefaultPolicy(
+        policy =>
+        {
+            policy
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                .AllowAnyHeader();
+        }));
 
 var app = builder.Build();
 
 var orders = new Dictionary<string, Order>();
 
+app.UseCors();
 app.MapHub<NotificationsHub>("/signalr/notifications");
 app.MapGet("/", () => "hello from order fullfilment service!");
 app.MapGet("/orders", () =>
 {
+    Console.WriteLine($"returning orders: {orders.Count}");
     return orders;
 });
 
@@ -53,7 +63,9 @@ serviceBusProcessor.ProcessMessageAsync += async (args) =>
 
         orders[order.orderId] = order;
         await notificationsHub.Clients.All.SendAsync("messageReceived", body);
-    } else {
+    }
+    else
+    {
         Console.WriteLine($"unknown command: {command.command}");
     }
     await args.CompleteMessageAsync(args.Message);
