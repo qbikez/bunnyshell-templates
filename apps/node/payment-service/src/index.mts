@@ -16,7 +16,7 @@ dotenv.config();
 
 // Define connection string and related Service Bus entity names here
 const connectionString = process.env.SERVICEBUS_CONNECTIONSTRING!;
-const queueName = process.env.QUEUE_NAME!;
+const queueName = process.env.QUEUE_NAME || 'payments';
 
 const port = process.env.PORT || 5000;
 
