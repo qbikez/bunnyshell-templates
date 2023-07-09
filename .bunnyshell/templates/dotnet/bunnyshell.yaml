@@ -29,7 +29,7 @@ components:
       - "cd terraform"
       - "/bns/helpers/terraform/get_managed_backend > zz_backend_override.tf"
       - "terraform init -input=false -no-color"
-      - 'terraform apply -var "instance_suffix={{}}" -input=false -auto-approve -no-color'
+      - 'terraform apply -var "instance_suffix={{env.unique}}" -input=false -auto-approve -no-color'
       - "BNS_TF_STATE_LIST=`terraform show -json`"
       - "SERVICEBUS_CONNECTIONSTRING=`terraform output -raw servicebus_connectionstring`"
     destroy:
