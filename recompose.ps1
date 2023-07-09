@@ -2,7 +2,7 @@ param($skip = @("services/mysql"))
 
 $composeFiles = Get-ChildItem -Recurse -Filter "docker-compose.yaml"
 
-$merged = @{
+$merged = [ordered]@{
   version  = "3.7"
   services = @{}
 }
