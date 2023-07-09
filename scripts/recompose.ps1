@@ -11,20 +11,37 @@ req powershell-yaml
 
 function rewrite-paths([string]$parentKeyPath, [hashtable]$hashtable, [string]$relDir) {
   $newValues = @{}
+  if ([string]::IsNullOrEmpty($relDir)) {
+    throw "relDir is missing"
+  }
 
   foreach ($kvp in $hashtable.GetEnumerator()) {
+    if ([string]::IsNullOrEmpty($kvp.value)) {
+      throw "$($kvp.key) value is missing"
+    }
     $keypath = "$parentKeyPath.$($kvp.Key)"
     if ($kvp.Value.GetType().Name -eq "Hashtable") {
+      write-host "recursing $keypath"
       $newValues[$kvp.key] = rewrite-paths $keypath $kvp.Value $relDir
     }
     else {
       switch ($keypath) {
         { $_.EndsWith(".build") -or $_.EndsWith(".env_file") } {
-          $newValue = (Join-Path $relDir $kvp.Value).Replace("\", "/").TrimStart("/")
+          if ($kvp.Value.GetType().Name -ne "String") {
+            $s = $kvp.value | Format-Table | Out-String 
+            Write-Host "'$s'"
+            throw "$keypath value is not a string it's a $($kvp.Value.GetType().Name)"
+          }
+      
+          $newValue = (Join-Path -Path $relDir -ChildPath $kvp.Value).Replace("\", "/").TrimStart("/")
           $newValues[$kvp.Key] = $newValue
         }
         { $_.EndsWith(".build.context") } {
-          $newValue = (Join-Path $relDir $kvp.Value).Replace("\", "/").TrimStart("/")
+          if ($kvp.Value.GetType().Name -ne "String") {
+            throw "$keypath value is not a string it's a $($kvp.Value.GetType().Name)"
+          }
+      
+          $newValue = (Join-Path -path $relDir -ChildPath $kvp.Value).Replace("\", "/").TrimStart("/")
           $newValues[$kvp.Key] = $newValue
         }
       }
@@ -50,7 +67,7 @@ foreach ($compose in $composeFiles) {
     continue
   }
   foreach ($service in $yaml.services.GetEnumerator()) {
-    $newValue = rewrite-paths "services.$($service.name)" $service.Value  $relDir
+    $newValue = rewrite-paths "services.$($service.name)" $service.Value $relDir
     $merged.services[$service.Key] = $newValue 
         
   }

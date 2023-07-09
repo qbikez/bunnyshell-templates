@@ -15,6 +15,26 @@ environmentVariables:
   tf_account_access_key: TF_OUT_AAAibAZHV1twAAABLw_account_access_key
   tf_account_name: TF_OUT_AAAibAZHV1twAAABLw_account_name
 components:
+  - kind: Terraform
+    name: infra
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: terraform/
+    runnerImage: 'hashicorp/terraform:1.5'
+    deploy:
+        - 'cd terraform'
+        - '/bns/helpers/terraform/get_managed_backend > zz_backend_override.tf'
+        - 'terraform init -input=false -no-color'
+        - 'terraform apply -var "instance_suffix={{}}" -input=false -auto-approve -no-color'
+        - 'BNS_TF_STATE_LIST=`terraform show -json`'
+        - 'SERVICEBUS_CONNECTIONSTRING=`terraform output -raw servicebus_connectionstring`'
+    destroy:
+        - 'cd terraform'
+        - '/bns/helpers/terraform/get_managed_backend > zz_backend_override.tf'
+        - 'terraform init -input=false -no-color'
+        - 'terraform destroy -var "instance_suffix={{env.unique}}" -input=false -auto-approve -no-color'
+    exportVariables:
+        - SERVICEBUS_CONNECTIONSTRING
 
   - kind: Service
     name: azurite
@@ -156,6 +176,8 @@ components:
         dockerfile: Dockerfile
       ports:
         - "5000:5000"
+    environment:
+      SERVICEBUS_CONNECTIONSTRING: {{env.vars.SERVICEBUS_CONNECTIONSTRING}}
     hosts: # you can add more
       - hostname: "payments-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: /

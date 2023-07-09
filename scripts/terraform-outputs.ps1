@@ -24,4 +24,4 @@ try {
 } finally {
     popd
 }
-set-dotenv "apps/node/payment-service/.env" "SERVICEBUS_CONNECTION_STRING" $outputs.servicebus_connectionstring.value
+set-dotenv "apps/node/payment-service/.env" "SERVICEBUS_CONNECTIONSTRING" $outputs.servicebus_connectionstring.value
