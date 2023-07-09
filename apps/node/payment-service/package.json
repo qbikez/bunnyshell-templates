@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.mjs",
   "scripts": {
-    "start": "vite-node -w src/",
+    "start": "vite-node -w src/index.mts",
     "build": "tsc"
   },
   "author": "",

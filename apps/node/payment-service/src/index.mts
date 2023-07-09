@@ -22,6 +22,36 @@ const port = process.env.PORT || 5000;
 
 const sbClient = new ServiceBusClient(connectionString);
 const sender = sbClient.createSender(queueName);
+const receiver = sbClient.createReceiver(queueName, "payments-accepted", {
+  receiveMode: "peekLock",
+});
+
+// subscribe and specify the message and error handlers
+receiver.subscribe({
+  processMessage: async (message) => {
+    console.log("handling message ", message.body);
+    const body = JSON.parse(message.body);
+    if (body.command === "pay") {
+      const { orderId } = body;
+
+      await sender.sendMessages({
+        body: JSON.stringify({
+          command: "paymentComlete",
+          orderId,
+        }),
+      });
+    
+      console.log(`payment comlete for order ${orderId}!`);
+    }
+
+    await receiver.completeMessage(message);
+  },
+  processError: async ({ error }) => {
+    console.error("error: ", error);
+  },
+}, {
+  autoCompleteMessages: false,
+});
 
 const app = express();
 
@@ -50,7 +80,11 @@ const server = app.listen(port, () => {
 if ((import.meta as any).hot) {
   // need to manually kill old server before reloading
   // https://github.com/vitest-dev/vitest/issues/2334
-  (import.meta as any).hot.on("vite:beforeFullReload", () => {
-    server.close();
+  (import.meta as any).hot.on("vite:beforeFullReload", async () => {
+    console.log("hot reloading server...");
+    await server.close();
+  });
+  (import.meta as any).hot.dispose(async () => {
+    await server.close()
   });
 }
