@@ -176,8 +176,8 @@ components:
         dockerfile: Dockerfile
       ports:
         - "5000:5000"
-    environment:
-      SERVICEBUS_CONNECTIONSTRING: {{env.vars.SERVICEBUS_CONNECTIONSTRING}}
+      environment:
+        SERVICEBUS_CONNECTIONSTRING: "{{env.vars.SERVICEBUS_CONNECTIONSTRING}}"
     hosts: # you can add more
       - hostname: "payments-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: /
