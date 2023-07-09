@@ -6,7 +6,7 @@
     "lint": "eslint --max-warnings 0 --ext .js,.jsx,.ts,.tsx src",
     "build": "tsc --noEmit && oc package .",
     "test": "vitest",
-    "start": "oc dev .. --components orders"
+    "start": "oc dev .. --components orders --prefix /registry/"
   },
   "oc": {
     "files": {
@@ -20,13 +20,6 @@
       ]
     },
     "parameters": {
-      "userId": {
-        "default": 1,
-        "description": "The user id from the user database",
-        "example": 1,
-        "mandatory": true,
-        "type": "number"
-      }
     }
   },
   "dependencies": {},

@@ -49,7 +49,7 @@ receiver.subscribe(
           body: {
             command: "paymentComplete",
             order: {
-              orderId,
+              orderId: `${orderId}`,
               status: "complete",
             },
           } as CommandMessage,
@@ -70,6 +70,12 @@ receiver.subscribe(
 );
 
 const app = express();
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  next();
+});
 
 app.use(bodyParser.json());
 app.get("/", (req, res) => {
@@ -78,18 +84,18 @@ app.get("/", (req, res) => {
 
 app.post("/pay", async (req, res) => {
   const { orderId } = req.body;
-
+  const order = {
+    orderId: `${orderId}`,
+    status: "pending",
+  };
   await sender.sendMessages({
     body: {
       command: "pay",
-      order: {
-        orderId,
-        status: "pending",
-      },
+      order,
     } as CommandMessage,
   });
   console.log(`payment accepted for order ${orderId}`);
-  res.status(204).json({ message: "payment accepted" });
+  res.status(202).json({ message: "payment accepted", order });
 });
 
 const server = app.listen(port, () => {
