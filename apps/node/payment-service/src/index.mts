@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import { ServiceBusClient } from "@azure/service-bus";
 import * as dotenv from "dotenv";
 
+const delay = 5000;
+
 declare global {
   namespace NodeJS {
     interface ImportMeta {
@@ -42,7 +44,7 @@ receiver.subscribe(
       const body = message.body as CommandMessage;
       if (body.command === "pay") {
         const { orderId } = body.order;
-
+        await new Promise((resolve) => setTimeout(resolve, delay));
         await sender.sendMessages({
           body: {
             command: "paymentComplete",
