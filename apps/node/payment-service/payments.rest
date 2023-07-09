@@ -1,4 +1,13 @@
-POST http://localhost:5000/pay
+@baseUrl = http://localhost:5000
+#@baseUrl = https://payments-ewoc74.bunnyenv.com
+
+###
+
+GET {{baseUrl}}
+
+###
+
+POST {{baseUrl}}/pay/
 Content-Type: application/json
 
 {

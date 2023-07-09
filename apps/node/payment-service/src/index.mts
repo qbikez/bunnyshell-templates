@@ -11,12 +11,19 @@ declare global {
   }
 }
 
+type CommandMessage = {
+  command: "paymentComplete" | "pay";
+  order: {
+    orderId: string;
+  };
+};
+
 // Load the .env file if it exists
 dotenv.config();
 
 // Define connection string and related Service Bus entity names here
 const connectionString = process.env.SERVICEBUS_CONNECTIONSTRING!;
-const topic = 'payments';
+const topic = "payments";
 const subscription = "payment-processing";
 
 const port = process.env.PORT || 5000;
@@ -28,31 +35,37 @@ const receiver = sbClient.createReceiver(topic, subscription, {
 });
 
 // subscribe and specify the message and error handlers
-receiver.subscribe({
-  processMessage: async (message) => {
-    console.log("handling message ", message.body);
-    const body = JSON.parse(message.body);
-    if (body.command === "pay") {
-      const { orderId } = body;
+receiver.subscribe(
+  {
+    processMessage: async (message) => {
+      console.log("handling message ", message.body);
+      const body = message.body as CommandMessage;
+      if (body.command === "pay") {
+        const { orderId } = body.order;
 
-      await sender.sendMessages({
-        body: JSON.stringify({
-          command: "paymentComlete",
-          orderId,
-        }),
-      });
-    
-      console.log(`payment comlete for order ${orderId}!`);
-    }
+        await sender.sendMessages({
+          body: {
+            command: "paymentComplete",
+            order: {
+              orderId,
+              status: "complete",
+            },
+          } as CommandMessage,
+        });
 
-    await receiver.completeMessage(message);
+        //console.log(`payment complete for order ${orderId}!`);
+      }
+
+      await receiver.completeMessage(message);
+    },
+    processError: async ({ error }) => {
+      console.error("error: ", error);
+    },
   },
-  processError: async ({ error }) => {
-    console.error("error: ", error);
-  },
-}, {
-  autoCompleteMessages: false,
-});
+  {
+    autoCompleteMessages: false,
+  }
+);
 
 const app = express();
 
@@ -65,10 +78,13 @@ app.post("/pay", async (req, res) => {
   const { orderId } = req.body;
 
   await sender.sendMessages({
-    body: JSON.stringify({
+    body: {
       command: "pay",
-      orderId,
-    }),
+      order: {
+        orderId,
+        status: "pending",
+      },
+    } as CommandMessage,
   });
   console.log(`payment accepted for order ${orderId}`);
   res.status(204).json({ message: "payment accepted" });
@@ -86,6 +102,6 @@ if ((import.meta as any).hot) {
     await server.close();
   });
   (import.meta as any).hot.dispose(async () => {
-    await server.close()
+    await server.close();
   });
 }
