@@ -44,7 +44,7 @@ serviceBusProcessor.ProcessMessageAsync += async (args) =>
         Console.WriteLine($"processing order: {order.orderId} with status '{order.status}'");
 
         orders[order.orderId] = order;
-        await notificationsHub.Clients.All.SendAsync("ReceiveMessage", body);
+        await notificationsHub.Clients.All.SendAsync("messageReceived", body);
     }
     else if (command.command == "paymentComplete")
     {
@@ -52,7 +52,7 @@ serviceBusProcessor.ProcessMessageAsync += async (args) =>
         Console.WriteLine($"marking order as '{order.status}': {order.orderId}");
 
         orders[order.orderId] = order;
-        await notificationsHub.Clients.All.SendAsync("ReceiveMessage", body);
+        await notificationsHub.Clients.All.SendAsync("messageReceived", body);
     } else {
         Console.WriteLine($"unknown command: {command.command}");
     }
