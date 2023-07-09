@@ -143,6 +143,24 @@ components:
     #     cpu: '0.15'
     #     memory: 500M
 
+  - kind: Application
+    version: v1
+    name: payments
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: /apps/node/payment-service
+    gitDockerComposePath: /apps/node/payment-service/docker-compose.yaml
+    dockerCompose:
+      build:
+        context: apps/node/payment-service
+        dockerfile: Dockerfile
+      ports:
+        - "5000:5000"
+    hosts: # you can add more
+      - hostname: "payments-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: /
+        servicePort: 5000
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
 # security:
 #   access:
 #     allowedIps: # only IPs in these ranges will be able to access the non-public hosts
