@@ -2,9 +2,10 @@
   "name": "payment-service",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "dist/index.mjs",
   "scripts": {
-    "start": "vite-node -w index.ts"
+    "start": "vite-node -w src/",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
