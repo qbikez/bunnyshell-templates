@@ -22,8 +22,15 @@ resource "azurerm_servicebus_topic" "payments" {
   enable_partitioning = true
 }
 
-resource "azurerm_servicebus_subscription" "payment-accepted" {
-  name               = "payments-accepted"
+resource "azurerm_servicebus_subscription" "payment-processing" {
+  name               = "payment-processing"
+  topic_id           = azurerm_servicebus_topic.payments.id
+  max_delivery_count = 1
+  default_message_ttl = "PT1M" 
+}
+
+resource "azurerm_servicebus_subscription" "payment-completed" {
+  name               = "orders"
   topic_id           = azurerm_servicebus_topic.payments.id
   max_delivery_count = 1
   default_message_ttl = "PT1M" 

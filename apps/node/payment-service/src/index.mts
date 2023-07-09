@@ -16,13 +16,14 @@ dotenv.config();
 
 // Define connection string and related Service Bus entity names here
 const connectionString = process.env.SERVICEBUS_CONNECTIONSTRING!;
-const queueName = process.env.QUEUE_NAME || 'payments';
+const topic = 'payments';
+const subscription = "payment-processing";
 
 const port = process.env.PORT || 5000;
 
 const sbClient = new ServiceBusClient(connectionString);
-const sender = sbClient.createSender(queueName);
-const receiver = sbClient.createReceiver(queueName, "payments-accepted", {
+const sender = sbClient.createSender(topic);
+const receiver = sbClient.createReceiver(topic, subscription, {
   receiveMode: "peekLock",
 });
 
