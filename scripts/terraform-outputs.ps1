@@ -42,6 +42,6 @@ try {
 } finally {
     popd
 }
-set-dotenv "apps/node/payment-service/.env" "SERVICEBUS_CONNECTIONSTRING" $outputs.servicebus_connectionstring.value
-set-json "apps/dotnet/my-api/appsettings.Development.json" "ConnectionStrings:ServiceBus" $outputs.servicebus_connectionstring.value
-set-dotenv "apps/dotnet/my-api/.env" "ConnectionStrings__ServiceBus" $outputs.servicebus_connectionstring.value
+set-dotenv "apps/payments/.env" "SERVICEBUS_CONNECTIONSTRING" $outputs.servicebus_connectionstring.value
+set-json "apps/orders/appsettings.local.json" "ConnectionStrings:ServiceBus" $outputs.servicebus_connectionstring.value
+set-dotenv "apps/orders/.env" "ConnectionStrings__ServiceBus" $outputs.servicebus_connectionstring.value

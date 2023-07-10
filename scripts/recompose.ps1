@@ -1,6 +1,6 @@
 param($skip = @("services/mysql", "apps/open-components/oc-registry"))
 
-$composeFiles = Get-ChildItem -Recurse -Filter "docker-compose.yaml"
+$composeFiles = Get-ChildItem -Recurse -Filter "docker-compose.yaml" | sort FullName
 
 $merged = [ordered]@{
   version  = "3.7"
