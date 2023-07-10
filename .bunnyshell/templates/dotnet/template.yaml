@@ -1,6 +1,7 @@
 name: micro-frontends
 description: 'A web application composed of micro frontends using Open Components, dotnet, nodejs and React'
 tags:
+  - bunnyshell-hackathon
   - dotnet
   - micro-frontends
   - open-components
