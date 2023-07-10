@@ -8,7 +8,6 @@ services:
         VITE_OC_REGISTRY: "http://localhost:3000/registry"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:7225
+      ASPNETCORE_URLS: http://+:5200
     ports:
-      - 7225:7225 # aspnet api
-      - 5200:5200 # vite frontend
+      - 5200:5200

@@ -12,10 +12,9 @@ services:
       args:
         VITE_OC_REGISTRY: http://localhost:3000/registry
     environment:
-      ASPNETCORE_URLS: http://+:7225
+      ASPNETCORE_URLS: http://+:5200
       ASPNETCORE_ENVIRONMENT: Development
     ports:
-      - 7225:7225
       - 5200:5200
   azurite:
     volumes:

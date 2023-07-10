@@ -7,6 +7,6 @@ export default defineConfig({
     },
   },
   env: {
-    baseUrl: "http://localhost:7225/",
+    baseUrl: "http://localhost:5200/",
   },
 });
