@@ -1,13 +1,14 @@
 version: '3.7'
 
 services:
-  my-api:
+  frontend:
     build:
       context: .
       args:
         VITE_OC_REGISTRY: "http://localhost:3000/registry"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:9000
+      ASPNETCORE_URLS: http://+:7225
     ports:
-      - 9000:9000
+      - 7225:7225 # aspnet api
+      - 5200:5200 # vite frontend

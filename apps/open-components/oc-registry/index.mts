@@ -46,6 +46,8 @@ var configuration = {
   ]
 };
 
+console.log("Configuration: ", configuration);
+
 var registry = oc.Registry({
   ...configuration,
   baseUrl: process.env.APPSETTING_BASEURL  || "http://localhost:3000/"

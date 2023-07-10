@@ -24,7 +24,7 @@ const App: React.FC<ClientProps> = () => {
   };
   return (
     <div>
-      <button onClick={() => void sendPayments()}>Click me!</button>
+      <button onClick={() => void sendPayments()}>Place Order</button>
     </div>
   )
 };

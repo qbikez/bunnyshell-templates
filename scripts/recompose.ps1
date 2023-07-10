@@ -1,4 +1,4 @@
-param($skip = @("services/mysql"))
+param($skip = @("services/mysql", "apps/open-components/oc-registry"))
 
 $composeFiles = Get-ChildItem -Recurse -Filter "docker-compose.yaml"
 
@@ -56,16 +56,23 @@ function rewrite-paths([string]$parentKeyPath, [hashtable]$hashtable, [string]$r
   return $hashtable
 }
 
+$workingDir = $pwd.Path
+
 foreach ($compose in $composeFiles) {
-  $yaml = Get-Content $compose.FullName | Out-String | ConvertFrom-Yaml
-  if ($compose.DirectoryName -eq $pwd.Path) { 
+  if ($compose.DirectoryName -eq $workingDir) { 
     continue
   }
-  $relDir = $compose.DirectoryName.Replace($pwd.Path, "").Replace("\", "/").Trim("/")
+  $relDir = $compose.DirectoryName.Replace($workingDir, "").Replace("\", "/").Trim("/")
+  
+  
   if (@($skip) -contains $relDir) {
-    write-host "skipping $relDir"
+    write-verbose "skipping $relDir" -verbose
     continue
   }
+  write-verbose "processing $($relDir)" -Verbose
+  
+  $yaml = Get-Content $compose.FullName | Out-String | ConvertFrom-Yaml
+
   foreach ($service in $yaml.services.GetEnumerator()) {
     $newValue = rewrite-paths "services.$($service.name)" $service.Value $relDir
     $merged.services[$service.Key] = $newValue 

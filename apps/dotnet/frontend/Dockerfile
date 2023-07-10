@@ -1,5 +1,4 @@
-# Learn about building .NET container images:
-# https://github.com/dotnet/dotnet-docker/blob/main/samples/README.md
+# node ClientApp
 FROM node:18 as clientapp-builder
 WORKDIR /source
 
@@ -11,6 +10,7 @@ RUN cd ClientApp && npm ci
 COPY ["ClientApp/", "ClientApp/"]
 RUN cd ClientApp && npm run build
 
+# dotnet backend
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS dotnet-builder
 WORKDIR /source
 COPY --from=clientapp-builder ["/source/ClientApp/dist/", "./ClientApp/dist"]
@@ -19,7 +19,7 @@ COPY --from=clientapp-builder ["/source/ClientApp/dist/", "./ClientApp/dist"]
 COPY *.csproj .
 RUN dotnet restore
 
-# copy everything else and build app
+# copy everything else and build the app
 COPY . .
 RUN dotnet build   --configuration Release --no-restore 
 RUN dotnet publish --configuration Release --no-build   --self-contained false -p NoNpm=true -o /app
