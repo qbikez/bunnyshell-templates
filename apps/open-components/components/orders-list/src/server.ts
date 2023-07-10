@@ -6,7 +6,7 @@ export async function data(
   callback: (error: any, data: ClientProps) => void
 ) {
   const ordersUrl =
-    context.env.name === "production" ? "" : "http://localhost:5223";
+    context.env.name === "production" ? context.baseUrl.replace("ocregistry-", "orders-") : "http://localhost:5223";
   return callback(null, { ordersUrl });
 }
 
