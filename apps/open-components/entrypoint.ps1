@@ -13,6 +13,7 @@ do {
     }
 } while (!$registryStarted)
 
+./package-components.ps1
 ./publish-components.ps1 -username $env:APPSETTING_REGISTRY_USERNAME -password $env:APPSETTING_REGISTRY_PASSWORD
 
 Stop-Process $proc.Id

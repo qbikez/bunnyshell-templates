@@ -5,5 +5,8 @@ export async function data(
   context: Context<OcParameters>,
   callback: (error: any, data: ClientProps) => void
 ) {
-  return callback(null, { ordersUrl: "http://localhost:5223" });
+  const ordersUrl =
+    context.env.name === "production" ? "/" : "http://localhost:5223";
+  return callback(null, { ordersUrl });
 }
+

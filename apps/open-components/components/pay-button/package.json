@@ -1,7 +1,7 @@
 {
   "name": "pay-button",
   "description": "",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "scripts": {
     "lint": "eslint --max-warnings 0 --ext .js,.jsx,.ts,.tsx src",
     "build": "tsc --noEmit && oc package .",

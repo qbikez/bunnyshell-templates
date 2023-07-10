@@ -16,7 +16,7 @@ interface Orders {
 
 const App: React.FC<ClientProps> = (props) => {
   const { ordersUrl } = props;
-  const signalRUrl = `${ordersUrl}/signalr/notifications`;
+  const signalRUrl = `${ordersUrl}/orders/signalr/notifications`;
 
   const [orders, setOrders] = useState<Orders | null>(null);
   const [error, setError] = useState("");

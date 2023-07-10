@@ -28,7 +28,7 @@ var configuration = {
     username: process.env.APPSETTING_REGISTRY_USERNAME,
     password: process.env.APPSETTING_REGISTRY_PASSWORD,
   },
-  env: { name: "production" },
+  env: { name: process.env.ENV_NAME || "production" },
   storage: {
     adapter: (options: any) => azure(options),
     options: {

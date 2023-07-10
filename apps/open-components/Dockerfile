@@ -19,10 +19,7 @@ RUN npm ci
 
 COPY ["./package-components.ps1", "./"]
 COPY ["components/", "./components/"]
-RUN pwsh ./package-components.ps1
 
-
-WORKDIR /app
 EXPOSE 3000
 COPY ["./*.ps1", "./"]
 

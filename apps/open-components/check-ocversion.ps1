@@ -1,6 +1,7 @@
 param(
     $ocUrl, 
-    $ocName
+    $ocName,
+    $autoupdate = $true
 )
 
 $VerbosePreference = "Continue"
@@ -33,10 +34,22 @@ catch {
 
 write-host "latest version in registry: $latestVersion"
 
-return $latestVersion -lt $ocVersion
+$versionExists = $latestVersion -ge $ocVersion
+$shouldPublish = !$versionExists
+
+if ($versionExists -and $autoupdate) {
+    $build = $latestVersion.Build + 1
+    $newVersion = (New-Object -Type Version ($versionFromFile.Major, $versionFromFile.Minor, $build))
+    $json.version = "$($newVersion.Major).$($newVersion.Minor).$($newVersion.Build)"
+    write-host "updating version in package.json to $($json.version)"
+    $json | convertto-json -depth 100 | set-content $ocName/package.json
+    return $true
+} else {
+    return $shouldPublish 
+}
 
 # $buildVersion = [Version]::Parse($ocVersion) 
-# $versionExists = $existingVersion -ne $null
+# 
 
 # echo "##vso[task.setvariable variable=$outputVariable]$versionExists"
 
