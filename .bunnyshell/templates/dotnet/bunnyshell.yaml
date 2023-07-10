@@ -16,8 +16,6 @@ environmentVariables:
   ARM_TENANT_ID: "<<BNS_SECRET>>"
   oc_password: "<<BNS_SECRET>>"
   oc_username: bunny
-  tf_account_access_key: TF_OUT_AAAibAZHV1twAAABLw_account_access_key
-  tf_account_name: TF_OUT_AAAibAZHV1twAAABLw_account_name
 components:
   - kind: Terraform
     name: infra
@@ -104,8 +102,6 @@ components:
         APPSETTING_REGISTRY_USERNAME: "{{env.vars.oc_username}}"
 
         # APPSETTING_CDN_ENDPOINT: "https://{{env.vars.tf_account_name}}.blob.core.windows.net/"
-        # APPSETTING_STORAGE_ACCOUNT_KEY: "{{env.vars.tf_account_access_key}}"
-        # APPSETTING_STORAGE_ACCOUNT_NAME: "{{env.vars.tf_account_name}}"
         APPSETTING_CDN_ENDPOINT: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
         APPSETTING_BLOB_URL: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
         APPSETTING_STORAGE_ACCOUNT_NAME: "devstoreaccount1"
