@@ -1,24 +1,33 @@
 version: "3.7"
 services:
-  payments:
-    build:
-      context: apps/payments/.
-    env_file: apps/payments/.env
-    ports:
-      - 5000:5000
   frontend:
+    ports:
+      - 5200:5200
     build:
       context: apps/frontend/.
       args:
         VITE_OC_REGISTRY: http://localhost:3000/registry
     environment:
-      ASPNETCORE_URLS: http://+:5200
       ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5200
+  orders:
     ports:
-      - 5200:5200
+      - 5223:5223
+    build:
+      context: apps/orders/.
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__ServiceBus: ${ConnectionStrings__ServiceBus}
+      ASPNETCORE_URLS: http://+:5223
   azurite:
     volumes:
       - ./log:/log
+    build: services/azurite/.
+    ports:
+      - 10000:10000
+      - 10001:10001
+      - 10002:10002
+    env_file: services/azurite/.env
     command:
       - azurite
       - -l
@@ -31,25 +40,17 @@ services:
       - 0.0.0.0
       - -d
       - /log/debug.log
-    env_file: services/azurite/.env
-    build: services/azurite/.
-    ports:
-      - 10000:10000
-      - 10001:10001
-      - 10002:10002
   oc-registry:
-    build: apps/open-components/.
-    env_file: apps/open-components/oc-registry/.env
     ports:
       - 3000:3000
     restart: unless-stopped
-  orders:
-    build:
-      context: apps/orders/.
-    environment:
-      ASPNETCORE_URLS: http://+:5223
-      ASPNETCORE_ENVIRONMENT: Development
+    build: apps/open-components/.
+    env_file: apps/open-components/oc-registry/.env
+  payments:
     ports:
-      - 5223:5223
-    env_file: apps/orders/.env
+      - 5000:5000
+    build:
+      context: apps/payments/.
+    environment:
+      SERVICEBUS_CONNECTIONSTRING: ${SERVICEBUS_CONNECTIONSTRING}
 

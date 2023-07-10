@@ -57,6 +57,7 @@ function rewrite-paths([string]$parentKeyPath, [hashtable]$hashtable, [string]$r
 }
 
 $workingDir = $pwd.Path
+$mergedEnv = [ordered]@{}
 
 foreach ($compose in $composeFiles) {
   if ($compose.DirectoryName -eq $workingDir) { 
@@ -75,9 +76,24 @@ foreach ($compose in $composeFiles) {
 
   foreach ($service in $yaml.services.GetEnumerator()) {
     $newValue = rewrite-paths "services.$($service.name)" $service.Value $relDir
-    $merged.services[$service.Key] = $newValue 
-        
+    $merged.services[$service.Key] = $newValue         
+  }
+
+  if (test-path "$($compose.DirectoryName)/.env") {
+    $env = Get-Content "$($compose.DirectoryName)/.env"
+    $env | ForEach-Object {
+      if ($_ -match "^\s*([^=]+)\s*=\s*(.*)\s*$") {
+        $key = $matches[1]
+        $value = $matches[2]
+        $mergedEnv.$key = $value
+      }
+    }
   }
 }
 
 $merged | ConvertTo-Yaml -Options WithIndentedSequences | Out-File "docker-compose.yaml"
+$envFile = @()
+foreach($kvp in $mergedEnv.GetEnumerator()) {
+  $envFile += "$($kvP.Key)=$($kvp.Value)"
+}
+$envFile | Out-File ".env"
