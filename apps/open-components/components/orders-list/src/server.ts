@@ -7,7 +7,7 @@ export async function data(
 ) {
   const ordersUrl =
     context.env.name === "production"
-      ? "" //context.baseUrl.replace("ocregistry-", "orders-")
+      ? context.baseUrl.replace("ocregistry-", "orders-")
       : "http://localhost:5223";
   return callback(null, { ordersUrl });
 }
