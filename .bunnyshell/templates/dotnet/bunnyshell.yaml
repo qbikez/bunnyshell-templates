@@ -6,7 +6,7 @@ name: micro-frontends
 type: primary # primary | ephemeral
 deployment:
   strategy:
-    type: Recreate # RollingUpdate
+    type: RollingUpdate
 #     maxUnavailable: 2 # optional, the default value is 25%
 #     maxSurge: 50% # optional, the default value is 25%
 environmentVariables:
@@ -30,6 +30,8 @@ components:
       - 'terraform apply -var "instance_suffix={{env.unique}}" -input=false -auto-approve -no-color'
       - "BNS_TF_STATE_LIST=`terraform show -json`"
       - "SERVICEBUS_CONNECTIONSTRING=`terraform output -raw servicebus_connectionstring`"
+      - "ACCOUNT_ACCESS_KEY=`terraform output -raw account_access_key`"
+      - "ACCOUNT_NAME=`terraform output -raw account_name`"
     destroy:
       - "cd terraform"
       - "/bns/helpers/terraform/get_managed_backend > zz_backend_override.tf"
@@ -37,6 +39,8 @@ components:
       - 'terraform destroy -var "instance_suffix={{env.unique}}" -input=false -auto-approve -no-color'
     exportVariables:
       - SERVICEBUS_CONNECTIONSTRING
+      - ACCOUNT_ACCESS_KEY
+      - ACCOUNT_NAME
     environment:
       ARM_CLIENT_ID: "{{env.vars.ARM_CLIENT_ID}}"
       ARM_CLIENT_SECRET: "{{env.vars.ARM_CLIENT_SECRET}}"
@@ -101,11 +105,16 @@ components:
         APPSETTING_REGISTRY_PASSWORD: "{{env.vars.oc_password}}"
         APPSETTING_REGISTRY_USERNAME: "{{env.vars.oc_username}}"
 
-        # APPSETTING_CDN_ENDPOINT: "https://{{env.vars.tf_account_name}}.blob.core.windows.net/"
-        APPSETTING_CDN_ENDPOINT: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
-        APPSETTING_BLOB_URL: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
-        APPSETTING_STORAGE_ACCOUNT_NAME: "devstoreaccount1"
-        APPSETTING_STORAGE_ACCOUNT_KEY: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+        # APPSETTING_CDN_ENDPOINT: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
+        # APPSETTING_BLOB_URL:     "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
+        APPSETTING_CDN_ENDPOINT: "https://{{components.infra.exported.ACCOUNT_NAME}}.blob.core.windows.net/"
+        APPSETTING_BLOB_URL:     "https://{{components.infra.exported.ACCOUNT_NAME}}.blob.core.windows.net/"
+                
+        # APPSETTING_STORAGE_ACCOUNT_NAME: "devstoreaccount1"
+        # APPSETTING_STORAGE_ACCOUNT_KEY: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+
+        APPSETTING_STORAGE_ACCOUNT_NAME: "{{components.infra.exported.ACCOUNT_NAME}}"
+        APPSETTING_STORAGE_ACCOUNT_KEY: "{{components.infra.exported.ACCOUNT_ACCESS_KEY}}"
     hosts: # you can add more
       - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: /registry/
@@ -189,31 +198,3 @@ components:
         path: /pay/
         servicePort: 5000
         public: true
-# security:
-#   access:
-#     allowedIps: # only IPs in these ranges will be able to access the non-public hosts
-#       - '192.168.0.1/24'
-#       - '192.12.45.123/32'
-
-# volumes:
-#   - name: db-data
-#     size: 1Gi
-#     type: disk
-# dev:
-#   nginx:
-#     - containers:
-#         nginx:
-#           command: ['nginx']
-#           syncPaths:
-#             - remotePath: /var/www/
-#               localPath: ~/project
-#           portForwards:
-#             - "8080<8080"
-#           environment:
-#             WHEN_IN_DEV: '{{ env.vars.OTHER_VAR }}'
-#           resources:
-#               limits:
-#                   memory: 750M
-#               requests:
-#                   cpu: '0.15'
-#                   memory: 500M
