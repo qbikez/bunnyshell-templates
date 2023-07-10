@@ -112,7 +112,7 @@ components:
         servicePort: 3000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
       # expose it as the same host as front
-      - hostname: "{{env.unique}}.bunnyenv.com"
+      - hostname: "main-{{env.unique}}.bunnyenv.com"
         path: /registry/
         servicePort: 3000
         public: true
@@ -137,7 +137,7 @@ components:
         path: / # optional
         servicePort: 9000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
-      - hostname: "{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+      - hostname: "main-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: / # optional
         servicePort: 9000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
@@ -163,7 +163,7 @@ components:
         path: / # optional
         servicePort: 5223
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
-      - hostname: "{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+      - hostname: "main-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: /orders/
         servicePort: 5223
         public: true
