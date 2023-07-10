@@ -121,11 +121,11 @@ components:
     name: frontend
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
     gitBranch: main
-    gitApplicationPath: /apps/dotnet/frontend # optional; for monorepo apps
-    gitDockerComposePath: /apps/dotnet/frontend/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
+    gitApplicationPath: /apps/frontend # optional; for monorepo apps
+    gitDockerComposePath: /apps/frontend/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
     dockerCompose:
       build:
-        context: apps/dotnet/frontend
+        context: apps/frontend
         dockerfile: Dockerfile
       ports:
         - "9000:9000"
@@ -173,11 +173,11 @@ components:
     name: payments
     gitRepo: https://github.com/qbikez/bunnyshell-templates.git
     gitBranch: main
-    gitApplicationPath: /apps/node/payment-service
-    gitDockerComposePath: /apps/node/payment-service/docker-compose.yaml
+    gitApplicationPath: /apps/payments
+    gitDockerComposePath: /apps/payments/docker-compose.yaml
     dockerCompose:
       build:
-        context: apps/node/payment-service
+        context: apps/payments
         dockerfile: Dockerfile
       ports:
         - "5000:5000"
