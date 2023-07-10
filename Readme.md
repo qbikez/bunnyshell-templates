@@ -40,9 +40,11 @@ Once infrastructure is ready, you'll need connection strings, secrets, etc. conf
 ### Run services
 
 Each application in `apps` directory has it's own `docker-compose.yaml` file. You can run them separately or create one `docker-compose.yaml` to rule them all. To do this, use `scripts/recompose.ps1`. It will merge all separate docker-compose files along with `.env` files. Now you can simply run `docker compose up --build`.
-For local development, you can also start specific applications directly, without using docker. That would be `npm start` for node apps and `dotnet run` for .NET ones.
 
-## Deployment
+### Local development
+
+For local development, you can also start specific applications directly, without using docker. 
+That would be `npm start` for node apps and `dotnet run` for .NET ones. The ports, configs, etc. are set up so that apps running in docker are interchangeable with their versions running "bare-metal".
 
 ## Testing
 
@@ -52,4 +54,4 @@ There's a very simple end-to-end test written in cypress that checks if everythi
 2. `npm ci`
 3. `npm test` (or `npm run cypress:open` to open the UI)
 
-This will run against local services by default.
+This will run against local services by default. To test a remote deployment, set `CYPRESS_BASE_URL` env variable to the  base url of your deployment (i.e. `https://main-abc123.bunnyenv.com/`).
