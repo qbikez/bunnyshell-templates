@@ -16,4 +16,4 @@ RUN dotnet publish --self-contained false --no-restore -o /app
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["dotnet", "my-api.dll"]
+ENTRYPOINT ["dotnet", "orders.dll"]
