@@ -23,7 +23,7 @@ var app = builder.Build();
 var orders = new Dictionary<string, Order>();
 
 app.UseCors();
-app.MapHub<NotificationsHub>("/signalr/notifications");
+app.MapHub<NotificationsHub>("/orders/signalr/notifications");
 app.MapGet("/", () => "hello from order fullfilment service!");
 app.MapGet("/orders", () =>
 {
