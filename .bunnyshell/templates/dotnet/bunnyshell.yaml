@@ -187,7 +187,11 @@ components:
       - hostname: "payments-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: /
         servicePort: 5000
-        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps\
+      - hostname: "main-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: /payments/
+        servicePort: 5000
+        public: true
 # security:
 #   access:
 #     allowedIps: # only IPs in these ranges will be able to access the non-public hosts
