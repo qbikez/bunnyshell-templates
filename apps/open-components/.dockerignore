@@ -1,3 +1,3 @@
-node_modules/
+**/node_modules/
 *.tar.gz
-_package/
+**/_package/
