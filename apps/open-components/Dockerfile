@@ -17,12 +17,12 @@ WORKDIR /app
 COPY ["package*.json", "./"]
 RUN npm ci
 
-COPY ["./package-components.ps1", "./"]
+COPY ["./*.ps1", "./"]
 COPY ["components/", "./components/"]
-RUN pwsh ./package-components.ps1 -registryUrl:""
+RUN pwsh ./package-components.ps1 
 
 WORKDIR /app
 EXPOSE 3000
-COPY ["./*.ps1", "./"]
+#COPY ["./*.ps1", "./"]
 
 CMD [ "pwsh", "./entrypoint.ps1" ]
