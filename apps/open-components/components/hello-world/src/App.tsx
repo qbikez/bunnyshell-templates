@@ -2,10 +2,6 @@ import type { ClientProps } from './types';
 
 const paymentsUrl = "http://localhost:5000";
 
-interface AppProps extends ClientProps {
-  getMoreData?: boolean;
-}
-
 const App: React.FC<ClientProps> = () => {
   const sendPayments = async () => {
     const orderId = crypto.randomUUID();
@@ -21,7 +17,7 @@ const App: React.FC<ClientProps> = () => {
   };
   return (
     <div>
-      <button onClick={() => void sendPayments()}>Place Order</button>
+      <button onClick={() => void sendPayments()} data-testId="btn-place-order">Place Order</button>
     </div>
   )
 };

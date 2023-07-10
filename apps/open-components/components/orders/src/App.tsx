@@ -90,7 +90,7 @@ const App: React.FC<ClientProps> = () => {
   }
 
   return (
-    <div>
+    <div data-testId="order-list">
       {Object.entries(orders || {}).map(([key, order]) => (
         <div key={key} className={styles.order}>
           <span className={styles.orderId}>{order.orderId}|</span>
