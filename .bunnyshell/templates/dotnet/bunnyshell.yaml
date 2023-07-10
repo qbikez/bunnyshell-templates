@@ -46,45 +46,47 @@ components:
       ARM_CLIENT_SECRET: "{{env.vars.ARM_CLIENT_SECRET}}"
       ARM_TENANT_ID: "{{env.vars.ARM_TENANT_ID}}"
       ARM_SUBSCRIPTION_ID: "{{env.vars.ARM_SUBSCRIPTION_ID}}"
-  - kind: Service
-    name: azurite
-    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
-    gitBranch: main
-    gitApplicationPath: /services/azurite
-    dockerCompose:
-      build:
-        context: services/azurite
-        dockerfile: Dockerfile
-      ports:
-        - "10000:10000"
-        - "10001:10001"
-        - "10002:10002"
-      command:
-        [
-          "azurite",
-          "-l",
-          "/data",
-          "--blobHost",
-          "0.0.0.0",
-          "--queueHost",
-          "0.0.0.0",
-          "--tableHost",
-          "0.0.0.0",
-          "-d",
-          "/log/debug.log",
-          "--disableProductStyleUrl",
-        ]
-      # environment:
-      #   AZURITE_ACCOUNTS: "azurite-{{env.unique}}:Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
-    hosts: # you can add more
-      - hostname: "blob-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
-        path: / # optional
-        servicePort: 10000
-        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
-      - hostname: "tables-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
-        path: / # optional
-        servicePort: 10002
-        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+
+  # azurite can be used to replace Azure Storage for development/testing purposes
+  # - kind: Service
+  #   name: azurite
+  #   gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+  #   gitBranch: main
+  #   gitApplicationPath: /services/azurite
+  #   dockerCompose:
+  #     build:
+  #       context: services/azurite
+  #       dockerfile: Dockerfile
+  #     ports:
+  #       - "10000:10000"
+  #       - "10001:10001"
+  #       - "10002:10002"
+  #     command:
+  #       [
+  #         "azurite",
+  #         "-l",
+  #         "/data",
+  #         "--blobHost",
+  #         "0.0.0.0",
+  #         "--queueHost",
+  #         "0.0.0.0",
+  #         "--tableHost",
+  #         "0.0.0.0",
+  #         "-d",
+  #         "/log/debug.log",
+  #         "--disableProductStyleUrl",
+  #       ]
+  #     # environment:
+  #     #   AZURITE_ACCOUNTS: "azurite-{{env.unique}}:Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+  #   hosts: # you can add more
+  #     - hostname: "blob-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+  #       path: / # optional
+  #       servicePort: 10000
+  #       public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+  #     - hostname: "tables-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+  #       path: / # optional
+  #       servicePort: 10002
+  #       public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
 
   - kind: Application
     version: v1
@@ -105,16 +107,22 @@ components:
         APPSETTING_REGISTRY_PASSWORD: "{{env.vars.oc_password}}"
         APPSETTING_REGISTRY_USERNAME: "{{env.vars.oc_username}}"
 
-        # APPSETTING_CDN_ENDPOINT: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
-        # APPSETTING_BLOB_URL:     "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
+
+        #### when using Azure Storage
         APPSETTING_CDN_ENDPOINT: "https://{{components.infra.exported.ACCOUNT_NAME}}.blob.core.windows.net/"
         APPSETTING_BLOB_URL:     "https://{{components.infra.exported.ACCOUNT_NAME}}.blob.core.windows.net/"
-                
+        APPSETTING_STORAGE_ACCOUNT_NAME: "{{components.infra.exported.ACCOUNT_NAME}}"
+        APPSETTING_STORAGE_ACCOUNT_KEY: "{{components.infra.exported.ACCOUNT_ACCESS_KEY}}"
+        ######################################
+
+        #### when using AZURITE     
+
+        # APPSETTING_CDN_ENDPOINT: "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
+        # APPSETTING_BLOB_URL:     "https://blob-{{env.unique}}.bunnyenv.com/devstoreaccount1/"
         # APPSETTING_STORAGE_ACCOUNT_NAME: "devstoreaccount1"
         # APPSETTING_STORAGE_ACCOUNT_KEY: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
 
-        APPSETTING_STORAGE_ACCOUNT_NAME: "{{components.infra.exported.ACCOUNT_NAME}}"
-        APPSETTING_STORAGE_ACCOUNT_KEY: "{{components.infra.exported.ACCOUNT_ACCESS_KEY}}"
+        ######################################
     hosts: # you can add more
       - hostname: "ocregistry-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: /registry/
