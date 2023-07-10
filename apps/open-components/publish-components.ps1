@@ -9,10 +9,9 @@ try {
     foreach ($component in $components) {
         write-host "publishing $component to $registryUrl"
 
-        #$shouldPublish = & "$psscriptroot/check-ocversion.ps1" -ocUrl $registryUrl -ocName $component
-        $shouldPublish = $true
+        $shouldPublish = & "$psscriptroot/check-ocversion.ps1" -ocUrl $registryUrl -ocName $component
         if ($shouldPublish) {
-            npx oc publish --skipPackage $component --registries $registryUrl --username $username --password $password
+            npx oc publish $component --registries $registryUrl --username $username --password $password
             if ($LASTEXITCODE -ne 0) {
                 throw "failed to publish component $component"
             }

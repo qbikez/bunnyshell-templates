@@ -6,7 +6,9 @@ try {
     $components = Get-ChildItem -Directory | % { $_.Name }
 
     foreach ($component in $components) {
-        & "$psscriptroot/check-ocversion.ps1" -ocUrl $registryUrl -ocName $component
+        if ($registryUrl) {
+            & "$psscriptroot/check-ocversion.ps1" -ocUrl $registryUrl -ocName $component
+        }
         npx oc package $component --compress --useComponentDependencies
     }
 }
