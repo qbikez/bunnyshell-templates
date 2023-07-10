@@ -88,6 +88,8 @@ const App: React.FC<ClientProps> = (props) => {
   }
 
   return (
+    <div>
+      <h2>Your orders:</h2>
     <div data-testId="order-list">
       {Object.entries(orders || {}).map(([key, order]) => (
         <div key={key} className={styles.order}>
@@ -95,6 +97,7 @@ const App: React.FC<ClientProps> = (props) => {
           <span className={styles.status}>{order.status}</span>
         </div>
       ))}
+    </div>
     </div>
   );
 };
