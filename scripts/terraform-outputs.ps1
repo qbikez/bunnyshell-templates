@@ -8,22 +8,38 @@ pushd "$psscriptroot/../terraform"
 
 function set-json($path, $key, $value) {
     write-verbose "setting [$path] $key=$value" -verbose
+
+    if (!(Test-Path $path)) {
+        New-Item $path -ItemType file
+    }
+
     $json = Get-Content $path | ConvertFrom-Json
+    if ($json -eq $null) {
+        $json = @{}
+    }
     $components = $key.Split(":")
 
     $node = $json
     for($i = 0; $i -lt $components.Length - 1; $i++) {
         $component = $components[$i]
         if ($node.$component -eq $null) {
-            $node | Add-Member -MemberType NoteProperty -Name $component -Value @{}
+            $parent = $node
+            $node = New-Object -TypeName PSCustomObject
+            $parent | Add-Member -MemberType NoteProperty -Name $component -Value $node
+        } else {
+            $node = $node.$component
         }
-        $node = $node.$component
     }
 
-    $node.$($components[$components.Length - 1]) = $value
+    $component = $components[$components.Length - 1]
+    if ($node.$component -eq $null) {
+        $node | Add-Member -MemberType NoteProperty -Name $component -Value $value
+    }
+    $node.$component = $value
     
     $json | ConvertTo-Json -Depth 100 | Out-File $path
 }
+
 function set-dotenv($path, $key, $value) {
     write-verbose "setting [$path] $key=$value" -verbose
     $envPath = "$path"

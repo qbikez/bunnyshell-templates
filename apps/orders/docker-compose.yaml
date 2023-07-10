@@ -7,6 +7,6 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5223
-    env_file: .env
+      ConnectionStrings__ServiceBus: ${ConnectionStrings__ServiceBus}
     ports:
       - 5223:5223

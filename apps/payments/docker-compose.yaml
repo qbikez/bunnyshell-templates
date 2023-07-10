@@ -6,4 +6,5 @@ services:
       context: .
     ports:
       - 5000:5000
-    env_file: .env
+    environment:
+      SERVICEBUS_CONNECTIONSTRING: ${SERVICEBUS_CONNECTIONSTRING}
