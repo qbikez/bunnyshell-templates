@@ -2,7 +2,7 @@
 
 version: v1
 kind: Environment
-name: dotnet
+name: micro-frontends
 type: primary # primary | ephemeral
 deployment:
   strategy:

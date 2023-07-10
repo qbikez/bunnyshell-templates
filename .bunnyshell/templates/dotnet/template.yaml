@@ -1,10 +1,16 @@
-name: dotnetn
-description: dotnet
+name: micro-frontends
+description: 'A web application composed of micro frontends using Open Components, dotnet, nodejs and React'
 tags:
   - dotnet
+  - micro-frontends
+  - open-components
+  - service-bus
 icons: [ 'dotnet' ]
 stack:
   packages:
     - name: dotnet
       version: '7'
+    - name: nodejs
+      version: '18'
+
 discoverable: true
