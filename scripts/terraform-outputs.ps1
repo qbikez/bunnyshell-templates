@@ -1,3 +1,9 @@
+[CmdletBinding()]
+param (
+    [ValidateSet("terraform", "cache")]
+    $source = "terraform"
+)
+
 pushd "$psscriptroot/../terraform"
 
 function set-json($path, $key, $value) {
@@ -26,19 +32,30 @@ function set-dotenv($path, $key, $value) {
     }
 
     $env = Get-Content $envPath
+    $found = $false
     $env = $env | ForEach-Object {
         if ($_ -match "^\s*$key\s*=\s*") {
             "$key=`"$value`""
+            $found = $true
         } else {
             $_
         }
+    }
+
+    if (!$found) {
+        $env += "$key=`"$value`""
     }
 
     $env | Out-File -FilePath $envPath
 }
 
 try {
-    $outputs = terraform output -json | ConvertFrom-Json
+    if ($source -eq "terraform") {
+        $outputs = terraform output -json | ConvertFrom-Json
+        $outputs | ConvertTo-Json -Depth 100 | Out-File ".terraform-outputs.json"
+    } elseif ($source -eq "cache") {
+        $outputs = Get-Content ".terraform-outputs.json" | ConvertFrom-Json
+    }
 } finally {
     popd
 }

@@ -11,3 +11,4 @@ temp/
 obj/
 bin/
 appsettings.local.json
+.terraform-outputs.json
