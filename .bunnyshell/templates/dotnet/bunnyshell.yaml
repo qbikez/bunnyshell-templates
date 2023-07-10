@@ -96,7 +96,7 @@ components:
       ports:
         - "3000:3000"
       environment:
-        APPSETTING_BASEURL: "https://ocregistry-{{env.unique}}.bunnyenv.com"
+        APPSETTING_BASEURL: "https://ocregistry-{{env.unique}}.bunnyenv.com" # https://ocregistry-{{env.unique}}.bunnyenv.com/registry ?
 
         APPSETTING_REGISTRY_PASSWORD: "{{env.vars.oc_password}}"
         APPSETTING_REGISTRY_USERNAME: "{{env.vars.oc_username}}"
@@ -112,7 +112,7 @@ components:
         servicePort: 3000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
       # expose it as the same host as front
-      - hostname: "front-{{env.unique}}.bunnyenv.com"
+      - hostname: "{{env.unique}}.bunnyenv.com"
         path: /registry/
         servicePort: 3000
         public: true
@@ -137,35 +137,36 @@ components:
         path: / # optional
         servicePort: 9000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
-
-  - kind: Application
-    version: v1
-    name: my-api
-    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
-    gitBranch: main
-    gitApplicationPath: /apps/dotnet/my-api # optional; for monorepo apps
-    gitDockerComposePath: /apps/dotnet/my-api/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
-    dockerCompose:
-      build:
-        context: apps/dotnet/my-api
-        dockerfile: Dockerfile
-      ports:
-        - "9000:9000"
-      environment:
-        ASPNETCORE_ENVIRONMENT: Development
-        ASPNETCORE_URLS: http://+:9000
-    hosts: # you can add more
-      - hostname: "my-api-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+      - hostname: "{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: / # optional
         servicePort: 9000
         public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
 
-    # resources:
-    #   limits:
-    #     memory: 750M
-    #   requests:
-    #     cpu: '0.15'
-    #     memory: 500M
+  - kind: Application
+    version: v1
+    name: orders
+    gitRepo: https://github.com/qbikez/bunnyshell-templates.git
+    gitBranch: main
+    gitApplicationPath: /apps/orders # optional; for monorepo apps
+    gitDockerComposePath: /apps/orders/docker-compose.yaml # the path of the docker-compose.yaml inside the git_repo
+    dockerCompose:
+      build:
+        context: apps/orders
+        dockerfile: Dockerfile
+      ports:
+        - "5223:5223"
+      environment:
+        ASPNETCORE_ENVIRONMENT: Development
+        ASPNETCORE_URLS: http://+:5223
+    hosts: # you can add more
+      - hostname: "orders-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: / # optional
+        servicePort: 5223
+        public: true # will be publicly available, even if the user IP does not exist in security.allowedIps
+      - hostname: "{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
+        path: /orders/
+        servicePort: 5223
+        public: true
 
   - kind: Application
     version: v1
