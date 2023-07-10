@@ -5,7 +5,7 @@ const App: React.FC<ClientProps> = (props) => {
   const { paymentsUrl }= props; 
   const sendPayments = async () => {
     const orderId = crypto.randomUUID();
-    const response = await fetch(`${paymentsUrl}/pay`, {
+    const response = await fetch(`${paymentsUrl}/pay/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
