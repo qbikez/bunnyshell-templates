@@ -1,10 +1,27 @@
 version: "3.7"
 services:
-  azurite:
+  frontend:
+    build:
+      args:
+        VITE_OC_REGISTRY: http://localhost:3000/registry
+      context: apps/dotnet/frontend/.
+    environment:
+      ASPNETCORE_URLS: http://+:7225
+      ASPNETCORE_ENVIRONMENT: Development
     ports:
-      - 10000:10000
-      - 10001:10001
-      - 10002:10002
+      - 7225:7225
+      - 5200:5200
+  my-api:
+    build:
+      context: apps/dotnet/my-api/.
+    environment:
+      ASPNETCORE_URLS: http://+:5223
+      ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - 5223:5223
+  azurite:
+    build: services/azurite/.
+    env_file: services/azurite/.env
     command:
       - azurite
       - -l
@@ -17,27 +34,22 @@ services:
       - 0.0.0.0
       - -d
       - /log/debug.log
-    env_file: services/azurite/.env
+    ports:
+      - 10000:10000
+      - 10001:10001
+      - 10002:10002
     volumes:
       - ./log:/log
-    build: services/azurite/.
   oc-registry:
-    build: apps/open-components/oc-registry/.
+    restart: unless-stopped
+    build: apps/open-components/.
     ports:
       - 3000:3000
     env_file: apps/open-components/oc-registry/.env
-  my-api:
-    build:
-      context: apps/dotnet/my-api/.
-    environment:
-      ASPNETCORE_URLS: http://+:9000
-      ASPNETCORE_ENVIRONMENT: Development
-    ports:
-      - 9000:9000
   payments:
+    env_file: apps/node/payment-service/.env
     build:
       context: apps/node/payment-service/.
     ports:
       - 5000:5000
-    env_file: apps/node/payment-service/.env
 
