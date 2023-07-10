@@ -1,9 +1,9 @@
 import { Context } from "oc-template-typescript-react-compiler";
-import { AdditionalData, ClientProps, OcParameters } from "./types";
+import { ClientProps, OcParameters } from "./types";
 
 export async function data(
   context: Context<OcParameters>,
-  callback: (error: any, data: ClientProps | AdditionalData) => void
+  callback: (error: any, data: ClientProps) => void
 ) {
-  return callback(null, {});
+  return callback(null, { paymentsUrl: "http://localhost:5000" });
 }

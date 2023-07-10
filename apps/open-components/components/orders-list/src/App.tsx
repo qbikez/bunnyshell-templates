@@ -14,26 +14,25 @@ interface Orders {
   [key: string]: Order;
 }
 
-const apiUrl = "http://localhost:5223";
-const signalRUrl = `${apiUrl}/signalr/notifications`;
+const App: React.FC<ClientProps> = (props) => {
+  const { ordersUrl } = props;
+  const signalRUrl = `${ordersUrl}/signalr/notifications`;
 
-const App: React.FC<ClientProps> = () => {
-  
   const [orders, setOrders] = useState<Orders | null>(null);
   const [error, setError] = useState("");
 
   const fetchData = async () => {
     setError("");
     try {
-      const response = await fetch(`${apiUrl}/orders`);
-      const data = await response.json() as Orders;
+      const response = await fetch(`${ordersUrl}/orders`);
+      const data = (await response.json()) as Orders;
       setOrders(data);
     } catch (err) {
       console.error(err);
       setError(String(err));
     }
   };
-  
+
   const refreshCallback = useStaticCallback(async () => {
     console.log(`refreshing data`);
     await fetchData();
@@ -53,7 +52,6 @@ const App: React.FC<ClientProps> = () => {
     }
   };
 
-  
   useAsyncEffect(async () => {
     console.log("connecting to signalr");
     const connection = new signalR.HubConnectionBuilder()

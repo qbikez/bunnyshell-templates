@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 Console.WriteLine($"init...");
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.local.json", optional: true);
 
 builder.Services.AddSignalR();
 builder.Services.AddCors(options => options.AddDefaultPolicy(

@@ -1,8 +1,6 @@
 export interface OcParameters {
 }
 
-export interface AdditionalData {
-}
-
-export interface ClientProps extends Partial<AdditionalData> {
+export interface ClientProps {
+    ordersUrl: string;
 }

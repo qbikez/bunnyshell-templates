@@ -1,8 +1,8 @@
 import type { ClientProps } from './types';
 
-const paymentsUrl = "http://localhost:5000";
 
-const App: React.FC<ClientProps> = () => {
+const App: React.FC<ClientProps> = (props) => {
+  const { paymentsUrl }= props; 
   const sendPayments = async () => {
     const orderId = crypto.randomUUID();
     const response = await fetch(`${paymentsUrl}/pay`, {
