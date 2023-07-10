@@ -158,6 +158,7 @@ components:
       environment:
         ASPNETCORE_ENVIRONMENT: Development
         ASPNETCORE_URLS: http://+:5223
+        ConnectionStrings__ServiceBus: "{{components.infra.exported.SERVICEBUS_CONNECTIONSTRING}}"
     hosts: # you can add more
       - hostname: "orders-{{env.unique}}.bunnyenv.com" # has to be suffixed with -{{env.unique}}.bunnyenv.com
         path: / # optional
