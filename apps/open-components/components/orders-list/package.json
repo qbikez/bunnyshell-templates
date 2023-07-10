@@ -1,12 +1,12 @@
 {
-  "name": "orders",
+  "name": "orders-list",
   "description": "",
   "version": "1.0.2",
   "scripts": {
     "lint": "eslint --max-warnings 0 --ext .js,.jsx,.ts,.tsx src",
     "build": "tsc --noEmit && oc package .",
     "test": "vitest",
-    "start": "oc dev .. --components orders --prefix /registry/"
+    "start": "oc dev .. --components orders-list --prefix /registry/"
   },
   "oc": {
     "files": {

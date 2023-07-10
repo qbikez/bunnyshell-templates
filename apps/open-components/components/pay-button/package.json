@@ -1,12 +1,12 @@
 {
-  "name": "hello-world",
+  "name": "pay-button",
   "description": "",
   "version": "1.0.2",
   "scripts": {
     "lint": "eslint --max-warnings 0 --ext .js,.jsx,.ts,.tsx src",
     "build": "tsc --noEmit && oc package .",
     "test": "vitest",
-    "start": "oc dev .. --components hello-world --prefix /registry/"
+    "start": "oc dev .. --components pay-button --prefix /registry/"
   },
   "oc": {
     "files": {

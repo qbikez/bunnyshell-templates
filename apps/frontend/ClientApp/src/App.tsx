@@ -11,10 +11,10 @@ function App() {
       ></OpenComponentsClient>
       
       <oc-component
-        href={`${ocRegistry}/hello-world/1.x.x/?userId=1`}
+        href={`${ocRegistry}/pay-button/1.x.x/`}
       ></oc-component>
       <oc-component
-        href={`${ocRegistry}/orders/1.x.x/`}
+        href={`${ocRegistry}/orders-list/1.x.x/`}
       ></oc-component>
       
     </>
